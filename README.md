@@ -203,8 +203,8 @@ Inspired by [ToonFlow](https://github.com/HBAI-Ltd/Toonflow-app) — we simplifi
 ## 📮 Contact
 
 - Issues: [github.com/KevPH2026/kev-clip/issues](https://github.com/KevPH2026/kev-clip/issues)
-- Email: kev@kev-clip.com
-- Twitter: [@KevPH2026](https://twitter.com/KevPH2026)
+- Email: kiven1026@gmail.com
+- Twitter: [@skyerK12](https://x.com/skyerK12)
 
 ## 📄 License
 
