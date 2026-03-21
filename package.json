@@ -37,7 +37,7 @@
   "bugs": {
     "url": "https://github.com/KevPH2026/kev-clip/issues"
   },
-  "homepage": "https://github.com/KevPH2026/kev-clip#readme",
+  "homepage": "https://k-clip.superk.ai",
   "engines": {
     "node": ">=18.0.0 <21.0.0"
   },
