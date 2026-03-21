@@ -12,65 +12,39 @@
       background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
     }
-    .gradient-bg {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-    }
-    .glass {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
+    .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
     .hero-gradient {
       background: radial-gradient(ellipse at top, rgba(102, 126, 234, 0.3) 0%, transparent 50%),
                   radial-gradient(ellipse at bottom, rgba(240, 147, 251, 0.2) 0%, transparent 50%),
                   #0f0f1a;
-    }
-    .glow {
-      box-shadow: 0 0 60px rgba(102, 126, 234, 0.3);
-    }
-    .card-hover {
-      transition: all 0.3s ease;
-    }
-    .card-hover:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
     }
     @keyframes float {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-20px); }
     }
     .float { animation: float 6s ease-in-out infinite; }
-    @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.5); }
-      50% { box-shadow: 0 0 40px rgba(102, 126, 234, 0.8); }
-    }
-    .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
   </style>
 </head>
-<body class="bg-gray-900 text-white min-h-screen">
+<body class="bg-gray-900 text-white">
   
   <!-- Navigation -->
-  <nav class="fixed top-0 left-0 right-0 z-50 glass">
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800">
     <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center">
           <span class="text-xl font-bold">K</span>
         </div>
-        <div>
-          <h1 class="text-xl font-bold">Kev-Clip</h1>
-          <p class="text-xs text-gray-400 i18n-subtitle">AI Video Studio</p>
-        </div>
+        <span class="text-xl font-bold">Kev-Clip</span>
       </div>
-      <div class="flex items-center space-x-4">
-        <div class="hidden md:flex items-center space-x-1 bg-gray-800 rounded-lg p-1">
-          <button onclick="setLanguage('en')" id="lang-en" class="px-3 py-1 text-sm rounded-md bg-purple-600 text-white font-medium transition">EN</button>
-          <button onclick="setLanguage('zh')" id="lang-zh" class="px-3 py-1 text-sm rounded-md text-gray-400 hover:text-white transition">中文</button>
-        </div>
-        <button onclick="openConfig()" class="gradient-bg text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition i18n-start-creating">
-          Start Creating
-        </button>
+      
+      <div class="flex items-center space-x-6">
+        <a href="#features" class="text-gray-400 hover:text-white transition">Features</a>
+        <a href="#demo" class="text-gray-400 hover:text-white transition">Demo</a>
+        <a href="https://github.com/KevPH2026/kev-clip" target="_blank" class="text-gray-400 hover:text-white transition">GitHub</a>
+        <a href="/admin.html" class="gradient-bg text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition">
+          Launch App →
+        </a>
       </div>
     </div>
   </nav>
@@ -79,416 +53,198 @@
   <section class="hero-gradient min-h-screen flex items-center justify-center pt-20">
     <div class="max-w-6xl mx-auto px-4 text-center">
       <div class="float mb-8">
-        <span class="inline-flex items-center px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-300 text-sm mb-6">
+        <span class="inline-flex items-center px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-300 text-sm">
           <span class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
-          <span class="i18n-hero-badge">Now with 9 AI Models</span>
+          Now with 9 AI Models
         </span>
       </div>
       
       <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-        <span class="i18n-hero-title">Turn Your Ideas Into</span><br>
-        <span class="gradient-text i18n-hero-title-2">Stunning AI Videos</span>
+        Turn Your Ideas Into<br>
+        <span class="gradient-text">Stunning AI Videos</span>
       </h1>
       
-      <p class="text-xl text-gray-400 mb-8 max-w-2xl mx-auto i18n-hero-desc">
-        Describe any scene, choose your AI director, and watch your story come to life. 
-        No editing skills required.
+      <p class="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+        AI-powered video generation studio. Import stories, create storyboards, 
+        generate scripts with shots, and produce videos — all in one place.
       </p>
       
       <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-        <button onclick="openConfig()" class="group gradient-bg px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition flex items-center justify-center">
-          <span class="i18n-hero-cta">🎬 Create Your First Video</span>
-          <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-          </svg>
-        </button>
-        <button onclick="scrollToDemo()" class="px-8 py-4 rounded-full font-bold text-lg border border-gray-600 hover:border-purple-500 hover:bg-purple-500/10 transition i18n-watch-demo">
-          ▶ Watch Demo
-        </button>
+        <a href="/admin.html" class="gradient-bg px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition flex items-center justify-center">
+          🚀 Launch Studio
+        </a>
+        <a href="#features" class="px-8 py-4 rounded-full font-bold text-lg border border-gray-600 hover:border-purple-500 transition">
+          Learn More
+        </a>
       </div>
       
-      <!-- Stats -->
       <div class="flex justify-center gap-8 md:gap-16 text-center">
-        <div>
-          <div class="text-3xl md:text-4xl font-bold gradient-text">12K+</div>
-          <div class="text-gray-400 text-sm i18n-stat-videos">Videos Created</div>
-        </div>
-        <div>
-          <div class="text-3xl md:text-4xl font-bold gradient-text">2.8K+</div>
-          <div class="text-gray-400 text-sm i18n-stat-creators">Happy Creators</div>
-        </div>
-        <div>
-          <div class="text-3xl md:text-4xl font-bold gradient-text">9</div>
-          <div class="text-gray-400 text-sm i18n-stat-models">AI Models</div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Scroll indicator -->
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-      <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-      </svg>
-    </div>
-  </section>
-
-  <!-- Creator Studio Section -->
-  <section id="studio" class="py-20 bg-gray-800/50">
-    <div class="max-w-4xl mx-auto px-4">
-      <div class="text-center mb-12">
-        <h2 class="text-4xl font-bold mb-4">Create Your Video</h2>
-        <p class="text-gray-400">Describe your scene and let AI do the magic</p>
-      </div>
-      
-      <div class="glass rounded-2xl p-8">
-        <!-- Input Area -->
-        <div class="mb-6">
-          <label class="block text-sm font-medium text-gray-300 mb-2">Describe your scene</label>
-          <textarea 
-            id="promptInput" 
-            placeholder="A cyberpunk girl walking through neon-lit Tokyo streets at night, rain falling, reflections on wet pavement..."
-            class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 resize-none"
-            rows="4"
-          ></textarea>
-        </div>
-        
-        <!-- Options -->
-        <div class="grid grid-cols-2 gap-4 mb-6">
-          <div>
-            <label class="block text-sm text-gray-400 mb-1">Language</label>
-            <select id="languageSelect" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-white">
-              <option value="en">English</option>
-              <option value="zh">中文</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm text-gray-400 mb-1">Script Style</label>
-            <select id="scriptStyleSelect" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-white">
-              <option value="short-drama">Short Drama</option>
-              <option value="anime">Anime</option>
-              <option value="movie">Movie</option>
-              <option value="comedy">Comedy</option>
-              <option value="horror">Horror</option>
-            </select>
-          </div>
-        </div>
-        
-        <!-- Generate Button -->
-        <button 
-          id="generateBtn"
-          onclick="generateVideo()" 
-          class="w-full gradient-bg py-4 rounded-xl font-bold text-lg hover:opacity-90 transition flex items-center justify-center"
-        >
-          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          Generate Video
-        </button>
-        
-        <!-- Demo Mode Notice -->
-        <p id="demoNotice" class="text-center text-sm text-gray-500 mt-4 hidden">
-          🎬 Demo Mode: Using simulated AI generation
-        </p>
-      </div>
-      
-      <!-- Results Section -->
-      <div id="resultsSection" class="mt-8 hidden">
-        <h3 class="text-xl font-bold mb-4">Your Videos</h3>
-        <div id="videosGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Videos will be loaded here -->
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Demo Section -->
-  <section id="demo" class="py-20 bg-gray-900">
-    <div class="max-w-6xl mx-auto px-4">
-      <div class="text-center mb-16">
-        <h2 class="text-4xl font-bold mb-4 i18n-demo-title">See It In Action</h2>
-        <p class="text-gray-400 i18n-demo-desc">From text to video in seconds. Here's what our creators are making:</p>
-      </div>
-      
-      <div class="grid md:grid-cols-3 gap-6">
-        <!-- Demo Video 1 - Cyberpunk -->
-        <div class="glass rounded-2xl overflow-hidden card-hover">
-          <div class="aspect-video relative group">
-            <video 
-              src="https://videos.pexels.com/video-files/3129671/3129671-uhd_2560_1440_30fps.mp4" 
-              poster="https://images.pexels.com/videos/3129671/ai-generated-3129671.jpeg?auto=compress&cs=tinysrgb&w=640"
-              controls 
-              class="w-full h-full object-cover"
-            ></video>
-            <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-purple-500/90 text-xs font-medium backdrop-blur-sm">Cyberpunk</span>
-          </div>
-          <div class="p-4">
-            <h3 class="font-semibold mb-1">Neon City Dreams</h3>
-            <p class="text-sm text-gray-400">"Futuristic cyberpunk city with neon lights and flying cars..."</p>
-          </div>
-        </div>
-        
-        <!-- Demo Video 2 - Fantasy -->
-        <div class="glass rounded-2xl overflow-hidden card-hover">
-          <div class="aspect-video relative group">
-            <video 
-              src="https://videos.pexels.com/video-files/856973/856973-hd_1920_1080_30fps.mp4" 
-              poster="https://images.pexels.com/videos/856973/pexels-photo-856973.jpeg?auto=compress&cs=tinysrgb&w=640"
-              controls 
-              class="w-full h-full object-cover"
-            ></video>
-            <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-blue-500/90 text-xs font-medium backdrop-blur-sm">Fantasy</span>
-          </div>
-          <div class="p-4">
-            <h3 class="font-semibold mb-1">Ocean Dreams</h3>
-            <p class="text-sm text-gray-400">"Magical underwater world with glowing creatures..."</p>
-          </div>
-        </div>
-        
-        <!-- Demo Video 3 - Nature/Cinematic -->
-        <div class="glass rounded-2xl overflow-hidden card-hover">
-          <div class="aspect-video relative group">
-            <video 
-              src="https://videos.pexels.com/video-files/3195394/3195394-uhd_2560_1440_25fps.mp4" 
-              poster="https://images.pexels.com/videos/3195394/pexels-photo-3195394.jpeg?auto=compress&cs=tinysrgb&w=640"
-              controls 
-              class="w-full h-full object-cover"
-            ></video>
-            <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-pink-500/90 text-xs font-medium backdrop-blur-sm">Cinematic</span>
-          </div>
-          <div class="p-4">
-            <h3 class="font-semibold mb-1">Mountain Sunrise</h3>
-            <p class="text-sm text-gray-400">"Epic mountain landscape with dramatic lighting..."</p>
-          </div>
-        </div>
+        <div><div class="text-3xl md:text-4xl font-bold gradient-text">9</div><div class="text-gray-400 text-sm">AI Models</div></div>
+        <div><div class="text-3xl md:text-4xl font-bold gradient-text">5</div><div class="text-gray-400 text-sm">Workflow Steps</div></div>
+        <div><div class="text-3xl md:text-4xl font-bold gradient-text">0</div><div class="text-gray-400 text-sm">Platform Fee</div></div>
       </div>
     </div>
   </section>
 
   <!-- Features Section -->
-  <section class="py-20 bg-gray-800/30">
+  <section id="features" class="py-20 bg-gray-900">
     <div class="max-w-6xl mx-auto px-4">
       <div class="text-center mb-16">
-        <h2 class="text-4xl font-bold mb-4 i18n-features-title">Why Creators Love Kev-Clip</h2>
-        <p class="text-gray-400 i18n-features-desc">Everything you need to create professional videos</p>
+        <h2 class="text-4xl font-bold mb-4">Complete Workflow</h2>
+        <p class="text-gray-400">From story to video in 5 steps</p>
       </div>
       
-      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Feature 1 -->
-        <div class="glass rounded-2xl p-6 card-hover">
-          <div class="w-14 h-14 gradient-bg rounded-2xl flex items-center justify-center text-2xl mb-4">⚡</div>
-          <h3 class="text-xl font-bold mb-2 i18n-feature1-title">Lightning Fast</h3>
-          <p class="text-gray-400 text-sm i18n-feature1-desc">Generate videos in minutes, not hours. Our AI works 24/7.</p>
+      <div class="grid md:grid-cols-5 gap-6">
+        <div class="bg-gray-800 rounded-2xl p-6 text-center border border-gray-700">
+          <div class="w-14 h-14 gradient-bg rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">📁</div>
+          <h3 class="font-bold mb-2">1. Project</h3>
+          <p class="text-sm text-gray-400">Create and manage multiple video projects</p>
         </div>
         
-        <!-- Feature 2 -->
-        <div class="glass rounded-2xl p-6 card-hover">
-          <div class="w-14 h-14 gradient-bg rounded-2xl flex items-center justify-center text-2xl mb-4">🎨</div>
-          <h3 class="text-xl font-bold mb-2 i18n-feature2-title">9 AI Models</h3>
-          <p class="text-gray-400 text-sm i18n-feature2-desc">Choose from GPT-4o, Claude, DeepSeek, Runway, Pika & more.</p>
+        <div class="bg-gray-800 rounded-2xl p-6 text-center border border-gray-700">
+          <div class="w-14 h-14 gradient-bg rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">📚</div>
+          <h3 class="font-bold mb-2">2. Import</h3>
+          <p class="text-sm text-gray-400">Upload novels or stories chapter by chapter</p>
         </div>
         
-        <!-- Feature 3 -->
-        <div class="glass rounded-2xl p-6 card-hover">
-          <div class="w-14 h-14 gradient-bg rounded-2xl flex items-center justify-center text-2xl mb-4">🔒</div>
-          <h3 class="text-xl font-bold mb-2 i18n-feature3-title">100% Private</h3>
-          <p class="text-gray-400 text-sm i18n-feature3-desc">Your API keys stay in your browser. We never see them.</p>
+        <div class="bg-gray-800 rounded-2xl p-6 text-center border border-gray-700">
+          <div class="w-14 h-14 gradient-bg rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">🎬</div>
+          <h3 class="font-bold mb-2">3. Outline</h3>
+          <p class="text-sm text-gray-400">Create storyboards with scene breakdowns</p>
         </div>
         
-        <!-- Feature 4 -->
-        <div class="glass rounded-2xl p-6 card-hover">
-          <div class="w-14 h-14 gradient-bg rounded-2xl flex items-center justify-center text-2xl mb-4">🌐</div>
-          <h3 class="text-xl font-bold mb-2 i18n-feature4-title">Multi-Language</h3>
-          <p class="text-gray-400 text-sm i18n-feature4-desc">Create content in English, Chinese, and more languages.</p>
+        <div class="bg-gray-800 rounded-2xl p-6 text-center border border-gray-700">
+          <div class="w-14 h-14 gradient-bg rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">📝</div>
+          <h3 class="font-bold mb-2">4. Script</h3>
+          <p class="text-sm text-gray-400">Generate scripts with detailed shot lists</p>
+        </div>
+        
+        <div class="bg-gray-800 rounded-2xl p-6 text-center border border-gray-700">
+          <div class="w-14 h-14 gradient-bg rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">🎥</div>
+          <h3 class="font-bold mb-2">5. Video</h3>
+          <p class="text-sm text-gray-400">Produce AI videos with your chosen model</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- How It Works -->
+  <!-- Dashboard Preview -->
+  <section class="py-20 bg-gray-800/30">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-4xl font-bold mb-6">Powerful Admin Dashboard</h2>
+          
+          <ul class="space-y-4 text-gray-300">
+            <li class="flex items-start">
+              <span class="text-purple-400 mr-3">✓</span>
+              <span><strong>Project Management:</strong> Organize multiple video projects</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-purple-400 mr-3">✓</span>
+              <span><strong>Story Import:</strong> Upload and manage novel chapters</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-purple-400 mr-3">✓</span>
+              <span><strong>Storyboard Editor:</strong> Visual scene breakdown with characters</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-purple-400 mr-3">✓</span>
+              <span><strong>Shot List:</strong> Detailed camera angles and movements</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-purple-400 mr-3">✓</span>
+              <span><strong>AI Generation:</strong> Choose from 9 top AI models</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-purple-400 mr-3">✓</span>
+              <span><strong>Demo Mode:</strong> Try all features without API keys</span>
+            </li>
+          </ul>
+          
+          <a href="/admin.html" class="inline-block mt-8 gradient-bg px-8 py-3 rounded-lg font-bold hover:opacity-90 transition">
+            Launch Dashboard →
+          </a>
+        </div>
+        
+        <div class="bg-gray-800 rounded-2xl p-4 border border-gray-700">
+          <div class="bg-gray-900 rounded-xl p-6">
+            <div class="flex items-center justify-between mb-6">
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">K</div>
+                <span class="font-bold">Kev-Clip Admin</span>
+              </div>
+              <span class="text-xs text-green-400">● Live</span>
+            </div>
+            
+            <div class="space-y-3">
+              <div class="flex items-center px-4 py-3 bg-gray-800 rounded-lg">
+                <span class="mr-3">📁</span>
+                <span>Projects</span>
+              </div>
+              <div class="flex items-center px-4 py-3 bg-gray-800 rounded-lg">
+                <span class="mr-3">📚</span>
+                <span>Story Import</span>
+              </div>
+              <div class="flex items-center px-4 py-3 bg-purple-500/20 rounded-lg border-r-2 border-purple-500">
+                <span class="mr-3">🎬</span>
+                <span>Storyboard / Outline</span>
+              </div>
+              <div class="flex items-center px-4 py-3 bg-gray-800 rounded-lg">
+                <span class="mr-3">📝</span>
+                <span>Script / Shots</span>
+              </div>
+              <div class="flex items-center px-4 py-3 bg-gray-800 rounded-lg">
+                <span class="mr-3">🎥</span>
+                <span>Video Generation</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Models -->
   <section class="py-20 bg-gray-900">
     <div class="max-w-6xl mx-auto px-4">
       <div class="text-center mb-16">
-        <h2 class="text-4xl font-bold mb-4 i18n-how-title">How It Works</h2>
-        <p class="text-gray-400 i18n-how-desc">From idea to video in 3 simple steps</p>
-      </div>
-      
-      <div class="grid md:grid-cols-3 gap-8">
-        <!-- Step 1 -->
-        <div class="text-center">
-          <div class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6 pulse-glow">1</div>
-          <h3 class="text-xl font-bold mb-2 i18n-step1-name">Describe Your Scene</h3>
-          <p class="text-gray-400 i18n-step1-detail">Write a prompt describing what you want to see. Be as creative as you want.</p>
-        </div>
-        
-        <!-- Step 2 -->
-        <div class="text-center">
-          <div class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6 pulse-glow">2</div>
-          <h3 class="text-xl font-bold mb-2 i18n-step2-name">Choose Your AI</h3>
-          <p class="text-gray-400 i18n-step2-detail">Pick from 9 top AI models. Different models excel at different styles.</p>
-        </div>
-        
-        <!-- Step 3 -->
-        <div class="text-center">
-          <div class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6 pulse-glow">3</div>
-          <h3 class="text-xl font-bold mb-2 i18n-step3-name">Get Your Video</h3>
-          <p class="text-gray-400 i18n-step3-detail">Sit back and watch as AI generates your video. Download and share.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- AI Models Showcase -->
-  <section class="py-20 bg-gray-800/30">
-    <div class="max-w-6xl mx-auto px-4">
-      <div class="text-center mb-16">
-        <h2 class="text-4xl font-bold mb-4 i18n-models-title">Powered by Best AI Models</h2>
-        <p class="text-gray-400 i18n-models-desc">Choose the perfect AI for your creative vision</p>
+        <h2 class="text-4xl font-bold mb-4">Supported AI Models</h2>
+        <p class="text-gray-400">Choose the best AI for your creative vision</p>
       </div>
       
       <div class="grid md:grid-cols-2 gap-8">
-        <!-- Text Models -->
-        <div class="glass rounded-2xl p-8">
-          <h3 class="text-2xl font-bold mb-6 flex items-center">
-            <span class="w-10 h-10 bg-purple-500 rounded-xl flex items-center justify-center mr-3">🤖</span>
-            <span class="i18n-text-models">AI Screenwriters</span>
-          </h3>
-          <div class="space-y-3">
-            <div class="flex items-center justify-between p-3 rounded-xl bg-gray-800/50">
-              <div class="flex items-center">
-                <span class="font-medium">GPT-4o</span>
-                <span class="ml-2 px-2 py-0.5 bg-purple-500/30 text-purple-300 text-xs rounded">Best</span>
-              </div>
-              <span class="text-gray-400 text-sm">OpenAI</span>
-            </div>
-            <div class="flex items-center justify-between p-3 rounded-xl bg-gray-800/50">
-              <span class="font-medium">Claude 3 Opus</span>
-              <span class="text-gray-400 text-sm">Anthropic</span>
-            </div>
-            <div class="flex items-center justify-between p-3 rounded-xl bg-gray-800/50">
-              <span class="font-medium">DeepSeek-V3</span>
-              <span class="text-gray-400 text-sm">DeepSeek</span>
-            </div>
-            <div class="flex items-center justify-between p-3 rounded-xl bg-gray-800/50">
-              <span class="font-medium">Gemini Pro</span>
-              <span class="text-gray-400 text-sm">Google</span>
-            </div>
+        <div class="bg-gray-800 rounded-2xl p-8 border border-gray-700">
+          <h3 class="text-xl font-bold mb-6">🤖 AI Screenwriters</h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-gray-900 rounded-lg p-3"><div class="font-medium">GPT-4o</div><div class="text-xs text-gray-500">OpenAI</div></div>
+            <div class="bg-gray-900 rounded-lg p-3"><div class="font-medium">Claude 3</div><div class="text-xs text-gray-500">Anthropic</div></div>
+            <div class="bg-gray-900 rounded-lg p-3"><div class="font-medium">DeepSeek-V3</div><div class="text-xs text-gray-500">DeepSeek</div></div>
+            <div class="bg-gray-900 rounded-lg p-3"><div class="font-medium">Gemini Pro</div><div class="text-xs text-gray-500">Google</div></div>
           </div>
         </div>
         
-        <!-- Video Models -->
-        <div class="glass rounded-2xl p-8">
-          <h3 class="text-2xl font-bold mb-6 flex items-center">
-            <span class="w-10 h-10 bg-pink-500 rounded-xl flex items-center justify-center mr-3">🎥</span>
-            <span class="i18n-video-models">AI Directors</span>
-          </h3>
-          <div class="space-y-3">
-            <div class="flex items-center justify-between p-3 rounded-xl bg-gray-800/50">
-              <div class="flex items-center">
-                <span class="font-medium">Seedance Pro</span>
-                <span class="ml-2 px-2 py-0.5 bg-pink-500/30 text-pink-300 text-xs rounded">Best</span>
-              </div>
-              <span class="text-gray-400 text-sm">豆包</span>
-            </div>
-            <div class="flex items-center justify-between p-3 rounded-xl bg-gray-800/50">
-              <span class="font-medium">Gen-3 Alpha</span>
-              <span class="text-gray-400 text-sm">Runway</span>
-            </div>
-            <div class="flex items-center justify-between p-3 rounded-xl bg-gray-800/50">
-              <span class="font-medium">Pika 1.5</span>
-              <span class="text-gray-400 text-sm">Pika</span>
-            </div>
-            <div class="flex items-center justify-between p-3 rounded-xl bg-gray-800/50">
-              <span class="font-medium">Kling 1.5</span>
-              <span class="text-gray-400 text-sm">Kling</span>
-            </div>
+        <div class="bg-gray-800 rounded-2xl p-8 border border-gray-700">
+          <h3 class="text-xl font-bold mb-6">🎥 AI Directors</h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-gray-900 rounded-lg p-3"><div class="font-medium">Seedance</div><div class="text-xs text-gray-500">豆包</div></div>
+            <div class="bg-gray-900 rounded-lg p-3"><div class="font-medium">Gen-3</div><div class="text-xs text-gray-500">Runway</div></div>
+            <div class="bg-gray-900 rounded-lg p-3"><div class="font-medium">Pika 1.5</div><div class="text-xs text-gray-500">Pika</div></div>
+            <div class="bg-gray-900 rounded-lg p-3"><div class="font-medium">Kling 1.5</div><div class="text-xs text-gray-500">Kling</div></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Testimonials -->
-  <section class="py-20 bg-gray-900">
-    <div class="max-w-6xl mx-auto px-4">
-      <div class="text-center mb-16">
-        <h2 class="text-4xl font-bold mb-4 i18n-testimonials-title">What Creators Say</h2>
-      </div>
-      
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="glass rounded-2xl p-6">
-          <div class="flex items-center mb-4">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 mr-3"></div>
-            <div>
-              <div class="font-bold">Alex Chen</div>
-              <div class="text-sm text-gray-400">Content Creator</div>
-            </div>
-          </div>
-          <p class="text-gray-300">"Kev-Clip changed how I create content. What used to take days now takes minutes. The quality is incredible!"</p>
-          <div class="flex mt-4 text-yellow-400">★★★★★</div>
-        </div>
-        
-        <div class="glass rounded-2xl p-6">
-          <div class="flex items-center mb-4">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 mr-3"></div>
-            <div>
-              <div class="font-bold">Sarah Kim</div>
-              <div class="text-sm text-gray-400">Marketing Director</div>
-            </div>
-          </div>
-          <p class="text-gray-300">"We use Kev-Clip for all our product demos. Being able to choose different AI models for different styles is a game-changer."</p>
-          <div class="flex mt-4 text-yellow-400">★★★★★</div>
-        </div>
-        
-        <div class="glass rounded-2xl p-6">
-          <div class="flex items-center mb-4">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-pink-400 to-red-400 mr-3"></div>
-            <div>
-              <div class="font-bold">Mike Zhang</div>
-              <div class="text-sm text-gray-400">Indie Filmmaker</div>
-            </div>
-          </div>
-          <p class="text-gray-300">"As a filmmaker, I was skeptical. But Kev-Clip surprised me. The scriptwriting is genuinely creative, and the videos look amazing."</p>
-          <div class="flex mt-4 text-yellow-400">★★★★★</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ Section -->
-  <section class="py-20 bg-gray-800/30">
-    <div class="max-w-3xl mx-auto px-4">
-      <div class="text-center mb-16">
-        <h2 class="text-4xl font-bold mb-4 i18n-faq-title">Frequently Asked Questions</h2>
-      </div>
-      
-      <div class="space-y-4">
-        <div class="glass rounded-xl p-6">
-          <h3 class="font-bold text-lg mb-2 i18n-faq1-q">Is it really free?</h3>
-          <p class="text-gray-400 i18n-faq1-a">Yes! You only pay for the AI models you use through their APIs. We don't charge any platform fees.</p>
-        </div>
-        
-        <div class="glass rounded-xl p-6">
-          <h3 class="font-bold text-lg mb-2 i18n-faq2-q">Where do I get API keys?</h3>
-          <p class="text-gray-400 i18n-faq2-a">Sign up at OpenAI, DeepSeek, Runway, or other providers. Most offer free credits to start.</p>
-        </div>
-        
-        <div class="glass rounded-xl p-6">
-          <h3 class="font-bold text-lg mb-2 i18n-faq3-q">Is my data safe?</h3>
-          <p class="text-gray-400 i18n-faq3-a">Absolutely. Your API keys are stored only in your browser's local storage. We never see or store them on our servers.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Final CTA -->
+  <!-- CTA -->
   <section class="py-20 hero-gradient">
     <div class="max-w-4xl mx-auto px-4 text-center">
-      <h2 class="text-4xl md:text-5xl font-bold mb-6 i18n-cta-title">Ready to Create Something Amazing?</h2>
-      <p class="text-xl text-gray-400 mb-8 i18n-cta-desc">Join thousands of creators turning their ideas into stunning videos</p>
-      <button onclick="openConfig()" class="gradient-bg px-10 py-5 rounded-full font-bold text-xl hover:scale-105 transition pulse-glow i18n-cta-btn">
-        🚀 Start Creating Now — It's Free
-      </button>
+      <h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to Create?</h2>
+      <p class="text-xl text-gray-400 mb-8">Launch the studio and start creating your first AI video</p>
+      <a href="/admin.html" class="gradient-bg px-10 py-5 rounded-full font-bold text-xl hover:scale-105 transition inline-block">
+        🚀 Launch Studio Now
+      </a>
     </div>
   </section>
 
@@ -497,460 +253,21 @@
     <div class="max-w-6xl mx-auto px-4">
       <div class="flex flex-col md:flex-row justify-between items-center">
         <div class="flex items-center space-x-3 mb-4 md:mb-0">
-          <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
-            <span class="font-bold">K</span>
-          </div>
+          <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">K</div>
           <span class="font-bold">Kev-Clip</span>
         </div>
+        
         <div class="flex space-x-6 text-gray-400">
-          <a href="https://github.com/KevPH2026/kev-clip" class="hover:text-white transition">GitHub</a>
-          <a href="#" class="hover:text-white transition">Documentation</a>
-          <a href="#" class="hover:text-white transition">Contact</a>
+          <a href="https://github.com/KevPH2026/kev-clip" class="hover:text-white">GitHub</a>
+          <a href="/admin.html" class="hover:text-white">Launch App</a>
         </div>
       </div>
+      
       <div class="text-center text-gray-500 text-sm mt-8">
-        © 2026 Kev-Clip. Made with ❤️ for creators everywhere.
+        © 2026 Kev-Clip. Open source under MIT License.
       </div>
     </div>
   </footer>
 
-  <!-- Config Modal (Same as before but hidden initially) -->
-  <div id="configModal" style="display: none;" class="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm flex items-center justify-center z-50 overflow-y-auto py-8">
-    <!-- Modal content same as before -->
-    <div class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl p-0 max-w-2xl w-full mx-4 border border-purple-500/30 shadow-2xl shadow-purple-500/20 relative">
-      <button onclick="closeConfig()" class="absolute top-4 right-4 text-gray-400 hover:text-white z-10 p-2 rounded-full hover:bg-gray-700/50 transition">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
-      
-      <div class="relative overflow-hidden rounded-t-3xl bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 p-8 text-center">
-        <div class="absolute inset-0 bg-black/20"></div>
-        <div class="relative z-10">
-          <div class="text-5xl mb-4">👋</div>
-          <h2 class="text-3xl font-bold mb-2 i18n-welcome-title">Welcome to Your AI Studio</h2>
-          <p class="text-xl text-purple-100 i18n-welcome-subtitle">Where your ideas become cinema</p>
-        </div>
-      </div>
-      
-      <div class="p-8">
-        <!-- Same config content as before -->
-        <div class="text-center mb-8">
-          <p class="text-gray-400 i18n-ready-for">We've prepared everything for you</p>
-          <p class="text-lg font-semibold gradient-text mt-1 i18n-two-steps">Just 2 steps to unlock unlimited creation:</p>
-        </div>
-        
-        <!-- Step 1 & 2 same as before -->
-        <!-- [Include the full config modal content here] -->
-        
-        <!-- For brevity, I'll add the simplified version -->
-        <div class="mb-6">
-          <label class="block text-sm font-medium mb-2">AI Screenwriter</label>
-          <select id="configTextProvider" class="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-white">
-            <option value="openai">GPT-4o (OpenAI)</option>
-            <option value="deepseek">DeepSeek-V3</option>
-            <option value="anthropic">Claude 3 Opus</option>
-            <option value="google">Gemini Pro</option>
-          </select>
-          <input type="password" id="configTextKey" placeholder="Enter your API key" class="w-full mt-3 bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-white">
-        </div>
-        
-        <div class="mb-8">
-          <label class="block text-sm font-medium mb-2">AI Director</label>
-          <select id="configVideoProvider" class="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-white">
-            <option value="doubao">Seedance Pro (豆包)</option>
-            <option value="runway">Gen-3 Alpha (Runway)</option>
-            <option value="pika">Pika 1.5</option>
-            <option value="kling">Kling 1.5</option>
-          </select>
-          <input type="password" id="configVideoKey" placeholder="Enter your API key" class="w-full mt-3 bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-white">
-        </div>
-        
-        <button onclick="saveConfig()" class="w-full gradient-bg py-4 rounded-xl font-bold text-lg hover:opacity-90 transition">
-          🚀 Launch My AI Studio
-        </button>
-        
-        <button onclick="enterDemoMode()" class="w-full mt-3 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-gray-800 transition text-sm i18n-skip-config">
-          👀 Skip for now — Explore in Demo Mode
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // API Base URL
-    const API_BASE = '';
-    
-    // i18n translations
-    const i18n = {
-      en: {
-        subtitle: 'AI Video Studio',
-        'start-creating': 'Start Creating',
-        'hero-badge': 'Now with 9 AI Models',
-        'hero-title': 'Turn Your Ideas Into',
-        'hero-title-2': 'Stunning AI Videos',
-        'hero-desc': 'Describe any scene, choose your AI director, and watch your story come to life. No editing skills required.',
-        'hero-cta': '🎬 Create Your First Video',
-        'watch-demo': '▶ Watch Demo',
-        'stat-videos': 'Videos Created',
-        'stat-creators': 'Happy Creators',
-        'stat-models': 'AI Models',
-        'demo-title': 'See It In Action',
-        'demo-desc': 'From text to video in seconds. Here\'s what our creators are making:',
-        'features-title': 'Why Creators Love Kev-Clip',
-        'features-desc': 'Everything you need to create professional videos',
-        'feature1-title': 'Lightning Fast',
-        'feature1-desc': 'Generate videos in minutes, not hours. Our AI works 24/7.',
-        'feature2-title': '9 AI Models',
-        'feature2-desc': 'Choose from GPT-4o, Claude, DeepSeek, Runway, Pika & more.',
-        'feature3-title': '100% Private',
-        'feature3-desc': 'Your API keys stay in your browser. We never see them.',
-        'feature4-title': 'Multi-Language',
-        'feature4-desc': 'Create content in English, Chinese, and more languages.',
-        'how-title': 'How It Works',
-        'how-desc': 'From idea to video in 3 simple steps',
-        'step1-name': 'Describe Your Scene',
-        'step1-detail': 'Write a prompt describing what you want to see. Be as creative as you want.',
-        'step2-name': 'Choose Your AI',
-        'step2-detail': 'Pick from 9 top AI models. Different models excel at different styles.',
-        'step3-name': 'Get Your Video',
-        'step3-detail': 'Sit back and watch as AI generates your video. Download and share.',
-        'models-title': 'Powered by Best AI Models',
-        'models-desc': 'Choose the perfect AI for your creative vision',
-        'text-models': 'AI Screenwriters',
-        'video-models': 'AI Directors',
-        'testimonials-title': 'What Creators Say',
-        'faq-title': 'Frequently Asked Questions',
-        'faq1-q': 'Is it really free?',
-        'faq1-a': 'Yes! You only pay for the AI models you use through their APIs. We don\'t charge any platform fees.',
-        'faq2-q': 'Where do I get API keys?',
-        'faq2-a': 'Sign up at OpenAI, DeepSeek, Runway, or other providers. Most offer free credits to start.',
-        'faq3-q': 'Is my data safe?',
-        'faq3-a': 'Absolutely. Your API keys are stored only in your browser\'s local storage. We never see or store them on our servers.',
-        'cta-title': 'Ready to Create Something Amazing?',
-        'cta-desc': 'Join thousands of creators turning their ideas into stunning videos',
-        'cta-btn': '🚀 Start Creating Now — It\'s Free',
-        'skip-config': '👀 Skip for now — Explore in Demo Mode'
-      },
-      zh: {
-        subtitle: 'AI 视频工作室',
-        'start-creating': '开始创作',
-        'hero-badge': '现已支持 9 款 AI 模型',
-        'hero-title': '把你的想法变成',
-        'hero-title-2': '惊艳的 AI 视频',
-        'hero-desc': '描述任何场景，选择你的 AI 导演，看着你的故事变为现实。无需剪辑技能。',
-        'hero-cta': '🎬 创作你的第一个视频',
-        'watch-demo': '▶ 观看演示',
-        'stat-videos': '已创建视频',
-        'stat-creators': '满意创作者',
-        'stat-models': 'AI 模型',
-        'demo-title': '看看实际效果',
-        'demo-desc': '从文字到视频只需几秒钟。看看我们的创作者在做什么：',
-        'features-title': '创作者为何喜爱 Kev-Clip',
-        'features-desc': '创作专业视频所需的一切',
-        'feature1-title': '闪电般快速',
-        'feature1-desc': '几分钟生成视频，而非几小时。AI 24/7 全天候工作。',
-        'feature2-title': '9 款 AI 模型',
-        'feature2-desc': '从 GPT-4o、Claude、DeepSeek、Runway、Pika 等中选择。',
-        'feature3-title': '100% 私密',
-        'feature3-desc': '你的 API 密钥保存在浏览器中。我们永远不会看到它们。',
-        'feature4-title': '多语言',
-        'feature4-desc': '用英语、中文和更多语言创作内容。',
-        'how-title': '使用方法',
-        'how-desc': '3 个简单步骤，从想法到视频',
-        'step1-name': '描述你的场景',
-        'step1-detail': '写下你想要看到的场景描述。尽情发挥创意。',
-        'step2-name': '选择你的 AI',
-        'step2-detail': '从 9 款顶级 AI 模型中选择。不同模型擅长不同风格。',
-        'step3-name': '获取你的视频',
-        'step3-detail': '坐下来观看 AI 生成你的视频。下载并分享。',
-        'models-title': '由最佳 AI 模型驱动',
-        'models-desc': '为你的创意愿景选择完美的 AI',
-        'text-models': 'AI 编剧',
-        'video-models': 'AI 导演',
-        'testimonials-title': '创作者怎么说',
-        'faq-title': '常见问题',
-        'faq1-q': '真的免费吗？',
-        'faq1-a': '是的！你只需通过 API 向你使用的 AI 模型付费。我们不收取任何平台费用。',
-        'faq2-q': '在哪里获取 API 密钥？',
-        'faq2-a': '在 OpenAI、DeepSeek、Runway 或其他提供商处注册。大多数提供免费额度开始使用。',
-        'faq3-q': '我的数据安全吗？',
-        'faq3-a': '绝对安全。你的 API 密钥仅存储在浏览器的本地存储中。我们永远不会看到或在我们的服务器上存储它们。',
-        'cta-title': '准备好创作令人惊叹的作品了吗？',
-        'cta-desc': '加入数千名将想法变成惊艳视频的创作者',
-        'cta-btn': '🚀 立即开始创作 — 免费',
-        'skip-config': '👀 先跳过 — 以演示模式探索'
-      }
-    };
-
-    let currentLang = localStorage.getItem('kev-clip-lang') || 'en';
-    let userConfig = null;
-
-    function setLanguage(lang) {
-      currentLang = lang;
-      localStorage.setItem('kev-clip-lang', lang);
-      updateLanguage();
-    }
-
-    function updateLanguage() {
-      const t = i18n[currentLang];
-      
-      // Update tab styles
-      const enBtn = document.getElementById('lang-en');
-      const zhBtn = document.getElementById('lang-zh');
-      if (enBtn && zhBtn) {
-        if (currentLang === 'en') {
-          enBtn.className = 'px-3 py-1 text-sm rounded-md bg-purple-600 text-white font-medium transition';
-          zhBtn.className = 'px-3 py-1 text-sm rounded-md text-gray-400 hover:text-white transition';
-        } else {
-          enBtn.className = 'px-3 py-1 text-sm rounded-md text-gray-400 hover:text-white transition';
-          zhBtn.className = 'px-3 py-1 text-sm rounded-md bg-purple-600 text-white font-medium transition';
-        }
-      }
-      
-      // Update all i18n elements
-      document.querySelectorAll('[class*="i18n-"]').forEach(el => {
-        const classes = el.className.split(' ');
-        const i18nClass = classes.find(c => c.startsWith('i18n-'));
-        if (i18nClass) {
-          const key = i18nClass.replace('i18n-', '');
-          if (t[key]) {
-            if (el.tagName === 'INPUT') {
-              el.placeholder = t[key];
-            } else {
-              el.textContent = t[key];
-            }
-          }
-        }
-      });
-    }
-
-    function openConfig() {
-      const modal = document.getElementById('configModal');
-      if (modal) {
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-      }
-    }
-
-    function closeConfig() {
-      const modal = document.getElementById('configModal');
-      if (modal) {
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-      }
-    }
-
-    function scrollToDemo() {
-      document.getElementById('demo').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function saveConfig() {
-      const config = {
-        textProvider: document.getElementById('configTextProvider').value,
-        textKey: document.getElementById('configTextKey').value,
-        videoProvider: document.getElementById('configVideoProvider').value,
-        videoKey: document.getElementById('configVideoKey').value
-      };
-      
-      if (!config.textKey || !config.videoKey) {
-        alert(currentLang === 'zh' ? '请输入 API 密钥' : 'Please enter API keys');
-        return;
-      }
-      
-      localStorage.setItem('kev-clip-config', JSON.stringify(config));
-      userConfig = config;
-      closeConfig();
-      alert(currentLang === 'zh' ? '✅ 配置已保存！' : '✅ Configuration saved!');
-    }
-
-    // Enter demo mode without API keys
-    function enterDemoMode() {
-      const demoConfig = {
-        textProvider: 'openai',
-        textKey: '',
-        videoProvider: 'doubao',
-        videoKey: '',
-        demoMode: true
-      };
-      
-      localStorage.setItem('kev-clip-config', JSON.stringify(demoConfig));
-      userConfig = demoConfig;
-      closeConfig();
-      
-      const msg = currentLang === 'zh' 
-        ? '👀 演示模式已启动！您可以探索所有功能。要生成真实视频，请在设置中配置 API 密钥。' 
-        : '👀 Demo mode activated! You can explore all features. To generate real videos, configure API keys in settings.';
-      alert(msg);
-    }
-
-    // Check if in demo mode
-    function isDemoMode() {
-      return userConfig && userConfig.demoMode === true;
-    }
-
-    // Generate video
-    async function generateVideo() {
-      const t = i18n[currentLang];
-      const promptInput = document.getElementById('promptInput');
-      const prompt = promptInput ? promptInput.value : '';
-      
-      if (!prompt) {
-        alert(t.describeScene || 'Please describe your scene');
-        return;
-      }
-      
-      // Show demo notice if in demo mode
-      const demoNotice = document.getElementById('demoNotice');
-      if (demoNotice) {
-        demoNotice.classList.toggle('hidden', !isDemoMode());
-      }
-      
-      // Show loading state
-      const btn = document.getElementById('generateBtn');
-      if (btn) {
-        btn.disabled = true;
-        btn.innerHTML = '<span class="animate-spin mr-2">⚡</span> ' + (currentLang === 'zh' ? '生成中...' : 'Generating...');
-      }
-      
-      try {
-        const isDemo = isDemoMode();
-        const headers = {
-          'Content-Type': 'application/json'
-        };
-        
-        if (isDemo) {
-          headers['X-Demo-Mode'] = 'true';
-        } else if (userConfig) {
-          headers['X-Text-Provider'] = userConfig.textProvider;
-          headers['X-Text-Key'] = userConfig.textKey;
-          headers['X-Video-Provider'] = userConfig.videoProvider;
-          headers['X-Video-Key'] = userConfig.videoKey;
-        }
-        
-        // Step 1: Generate script
-        console.log('Generating script...', isDemo ? '(Demo Mode)' : '');
-        const scriptRes = await fetch(`${API_BASE}/api/scripts/generate`, {
-          method: 'POST',
-          headers,
-          body: JSON.stringify({
-            project_id: 1,
-            prompt: prompt,
-            title: prompt.slice(0, 50),
-            language: document.getElementById('languageSelect')?.value || currentLang,
-            scriptStyle: document.getElementById('scriptStyleSelect')?.value || 'short-drama'
-          })
-        });
-        
-        if (!scriptRes.ok) {
-          throw new Error('Failed to generate script');
-        }
-        
-        const script = await scriptRes.json();
-        console.log('Script generated:', script);
-        
-        // Step 2: Generate video
-        console.log('Generating video...', isDemo ? '(Demo Mode)' : '');
-        const videoRes = await fetch(`${API_BASE}/api/videos/generate`, {
-          method: 'POST',
-          headers,
-          body: JSON.stringify({
-            project_id: 1,
-            script_id: script.id,
-            prompt: prompt,
-            duration: 10
-          })
-        });
-        
-        if (!videoRes.ok) {
-          throw new Error('Failed to generate video');
-        }
-        
-        const video = await videoRes.json();
-        console.log('Video generation started:', video);
-        
-        // Show results section
-        const resultsSection = document.getElementById('resultsSection');
-        if (resultsSection) {
-          resultsSection.classList.remove('hidden');
-        }
-        
-        // Poll for video completion
-        pollVideoStatus(video.id);
-        
-      } catch (error) {
-        console.error('Generation failed:', error);
-        alert('❌ ' + error.message);
-      } finally {
-        if (btn) {
-          btn.disabled = false;
-          btn.innerHTML = `
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            Generate Video
-          `;
-        }
-      }
-    }
-
-    // Poll video status
-    async function pollVideoStatus(videoId) {
-      try {
-        const res = await fetch(`${API_BASE}/api/videos/1`);
-        const videos = await res.json();
-        const video = videos.find(v => v.id === videoId);
-        
-        if (!video) return;
-        
-        if (video.status === 'completed') {
-          // Add video to grid
-          const grid = document.getElementById('videosGrid');
-          if (grid) {
-            const videoCard = document.createElement('div');
-            videoCard.className = 'glass rounded-xl overflow-hidden';
-            videoCard.innerHTML = `
-              <div class="aspect-video">
-                <video src="${video.file_path}" controls class="w-full h-full object-cover"></video>
-              </div>
-              <div class="p-4">
-                <p class="text-sm text-gray-300 line-clamp-2">${video.prompt || 'Generated Video'}</p>
-                <div class="flex justify-between items-center mt-2">
-                  <span class="text-xs text-gray-500">${video.duration}s · ${new Date(video.created_at).toLocaleDateString()}</span>
-                  <span class="px-2 py-1 rounded text-xs bg-green-900 text-green-300">Completed</span>
-                </div>
-              </div>
-            `;
-            grid.prepend(videoCard);
-          }
-          
-          alert(currentLang === 'zh' 
-            ? (isDemoMode() ? '✅ 演示视频生成完成！（这是模拟视频）' : '✅ 视频生成完成！')
-            : (isDemoMode() ? '✅ Demo video completed! (This is a simulated video)' : '✅ Video generation completed!')
-          );
-        } else if (video.status === 'failed') {
-          alert('❌ ' + (video.error_msg || 'Generation failed'));
-        } else {
-          setTimeout(() => pollVideoStatus(videoId), 2000);
-        }
-      } catch (e) {
-        setTimeout(() => pollVideoStatus(videoId), 2000);
-      }
-    }
-
-    // Load videos
-    async function loadVideos() {
-      try {
-        const res = await fetch(`${API_BASE}/api/videos/1`);
-        const videos = await res.json();
-        console.log('Videos:', videos);
-        // Update UI with videos
-      } catch (e) {
-        console.error('Failed to load videos');
-      }
-    }
-
-    // Initialize
-    updateLanguage();
-  </script>
 </body>
 </html>
