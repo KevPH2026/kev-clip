@@ -9,7 +9,7 @@ AI-powered video generation studio with complete workflow: story import → stor
 ## 📸 Screenshots
 
 ### Landing Page
-![Landing Page](./docs/assets/landing-page.jpg)
+![Landing Page](./docs/assets/landing-page.jpg?v=2)
 
 ## ✨ Features
 
