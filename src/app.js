@@ -273,6 +273,8 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message });
 });
 
+const chalk = require('chalk');
+
 // Start
 initDB();
 app.listen(PORT, () => {
