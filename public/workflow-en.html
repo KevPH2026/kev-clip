@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      padding: 40px;
+    }
+    .container {
+      max-width: 1400px;
+      width: 100%;
+    }
+    .title {
+      text-align: center;
+      color: #fff;
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      text-align: center;
+      color: #a0a0b0;
+      font-size: 18px;
+      margin-bottom: 50px;
+    }
+    .workflow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+    .step {
+      flex: 1;
+      text-align: center;
+      position: relative;
+    }
+    .step-icon {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 48px;
+      box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+    }
+    .step-number {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 30px;
+      background: #764ba2;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .step-title {
+      color: #fff;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .step-desc {
+      color: #888;
+      font-size: 14px;
+    }
+    .arrow {
+      color: #667eea;
+      font-size: 32px;
+      font-weight: bold;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      color: #667eea;
+      font-size: 16px;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(102, 126, 234, 0.2);
+      color: #667eea;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      margin: 0 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Kev-Clip</h1>
+    <p class="subtitle">AI Video Generation Workflow · Deploy in 5 Minutes</p>
+    
+    <div class="workflow">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-icon">📚</div>
+        <div class="step-title">Story Import</div>
+        <div class="step-desc">Upload novel/script</div>
+      </div>
+      
+      <div class="arrow">→</div>
+      
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-icon">🎬</div>
+        <div class="step-title">Storyboard</div>
+        <div class="step-desc">Scene/character design</div>
+      </div>
+      
+      <div class="arrow">→</div>
+      
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-icon">📝</div>
+        <div class="step-title">Script Generation</div>
+        <div class="step-desc">Shots/dialogue/camera</div>
+      </div>
+      
+      <div class="arrow">→</div>
+      
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-icon">🎥</div>
+        <div class="step-title">Video Generation</div>
+        <div class="step-desc">9 AI models</div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <span class="badge">Zero Platform Fee</span>
+      <span class="badge">Unlimited</span>
+      <span class="badge">Open Source</span>
+    </div>
+  </div>
+</body>
+</html>
