@@ -6,6 +6,11 @@ AI-powered video generation studio with complete workflow: story import → stor
 
 [🚀 Live Demo](https://k-clip.superk.ai) · [📖 Docs](./docs) · [🐛 Issues](https://github.com/KevPH2026/kev-clip/issues)
 
+## 📸 Screenshots
+
+### Landing Page
+![Landing Page](./docs/assets/landing-page.jpg)
+
 ## ✨ Features
 
 - 📚 **Story Import** - Upload novels chapter by chapter
