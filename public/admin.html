@@ -9,13 +9,14 @@
   <style>
     * { font-family: 'Inter', sans-serif; }
     .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-    .sidebar-item { transition: all 0.2s; }
+    .sidebar-item { transition: all 0.2s; cursor: pointer; }
     .sidebar-item:hover, .sidebar-item.active { background: rgba(102, 126, 234, 0.1); border-right: 3px solid #667eea; }
+    .loading { animation: spin 1s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
   </style>
 </head>
 <body class="bg-gray-900 text-white">
   
-  <!-- Login Screen -->
   <div id="loginScreen" class="fixed inset-0 bg-gray-900 flex items-center justify-center z-50">
     <div class="bg-gray-800 rounded-2xl p-8 max-w-md w-full border border-gray-700">
       <div class="text-center mb-8">
@@ -24,6 +25,7 @@
         </div>
         <h1 class="text-2xl font-bold">Kev-Clip Admin</h1>
         <p class="text-gray-400 mt-2">AI Video Studio Management</p>
+        <div id="connectionStatus" class="mt-4 text-sm"></div>
       </div>
       
       <div class="space-y-4">
@@ -31,22 +33,18 @@
           Launch Dashboard
         </button>
         <button onclick="enterDemo()" class="w-full bg-gray-700 py-3 rounded-xl font-medium hover:bg-gray-600 transition text-sm">
-          Demo Mode (No API Keys)
+          Demo Mode
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Main Admin -->
   <div id="adminInterface" class="hidden min-h-screen flex">
     
-    <!-- Sidebar -->
     <aside class="w-64 bg-gray-800 border-r border-gray-700 flex flex-col">
       <div class="p-6 border-b border-gray-700">
         <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center">
-            <span class="font-bold">K</span>
-          </div>
+          <div class="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center">K</div>
           <div>
             <div class="font-bold">Kev-Clip</div>
             <div class="text-xs text-gray-400">Admin</div>
@@ -56,32 +54,25 @@
       
       <nav class="flex-1 py-4">
         <div class="px-4 mb-2 text-xs text-gray-500 uppercase">Workflow</div>
-        
-        <a href="#" onclick="showSection('projects')" class="sidebar-item active flex items-center px-6 py-3 text-sm">
+        <div onclick="showSection('projects')" class="sidebar-item active flex items-center px-6 py-3 text-sm cursor-pointer" data-section="projects">
           <span class="mr-3">📁</span> Projects
-        </a>
-        
-        <a href="#" onclick="showSection('novels')" class="sidebar-item flex items-center px-6 py-3 text-sm">
+        </div>
+        <div onclick="showSection('novels')" class="sidebar-item flex items-center px-6 py-3 text-sm cursor-pointer" data-section="novels">
           <span class="mr-3">📚</span> Story Import
-        </a>
-        
-        <a href="#" onclick="showSection('outlines')" class="sidebar-item flex items-center px-6 py-3 text-sm">
+        </div>
+        <div onclick="showSection('outlines')" class="sidebar-item flex items-center px-6 py-3 text-sm cursor-pointer" data-section="outlines">
           <span class="mr-3">🎬</span> Storyboard
-        </a>
-        
-        <a href="#" onclick="showSection('scripts')" class="sidebar-item flex items-center px-6 py-3 text-sm">
+        </div>
+        <div onclick="showSection('scripts')" class="sidebar-item flex items-center px-6 py-3 text-sm cursor-pointer" data-section="scripts">
           <span class="mr-3">📝</span> Script / Shots
-        </a>
-        
-        <a href="#" onclick="showSection('videos')" class="sidebar-item flex items-center px-6 py-3 text-sm">
+        </div>
+        <div onclick="showSection('videos')" class="sidebar-item flex items-center px-6 py-3 text-sm cursor-pointer" data-section="videos">
           <span class="mr-3">🎥</span> Video Gen
-        </a>
-        
+        </div>
         <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase">System</div>
-        
-        <a href="#" onclick="showSection('settings')" class="sidebar-item flex items-center px-6 py-3 text-sm">
+        <div onclick="showSection('settings')" class="sidebar-item flex items-center px-6 py-3 text-sm cursor-pointer" data-section="settings">
           <span class="mr-3">⚙️</span> Settings
-        </a>
+        </div>
       </nav>
       
       <div class="p-4 border-t border-gray-700">
@@ -95,204 +86,167 @@
       </div>
     </aside>
 
-    <!-- Main Content -->
     <main class="flex-1 overflow-auto">
-      
       <header class="bg-gray-800 border-b border-gray-700 px-8 py-4 flex justify-between items-center">
         <h2 id="pageTitle" class="text-xl font-bold">Projects</h2>
-        <button onclick="createNew()" class="gradient-bg px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90">
-          + Create New
-        </button>
+        <div id="headerActions"></div>
       </header>
 
       <div class="p-8">
         
-        <!-- Projects Section -->
+        <!-- Projects -->
         <div id="projectsSection" class="section">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 cursor-pointer" onclick="openProject(1)">
-              <div class="flex justify-between items-start mb-4">
-                <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center text-2xl">🎬</div>
-                <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded">Active</span>
-              </div>
-              <h3 class="font-bold text-lg mb-2">Cyberpunk Dreams</h3>
-              <p class="text-gray-400 text-sm mb-4">AI-generated cyberpunk short story</p>
-              <div class="flex justify-between text-sm text-gray-500">
-                <span>📚 5 chapters</span>
-                <span>🎥 3 videos</span>
-              </div>
-            </div>
-
-            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 cursor-pointer" onclick="openProject(2)">
-              <div class="flex justify-between items-start mb-4">
-                <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center text-2xl">🏰</div>
-                <span class="px-2 py-1 bg-yellow-500/20 text-yellow-400 text-xs rounded">Draft</span>
-              </div>
-              <h3 class="font-bold text-lg mb-2">Fantasy Kingdom</h3>
-              <p class="text-gray-400 text-sm mb-4">Epic fantasy adventure story</p>
-              <div class="flex justify-between text-sm text-gray-500">
-                <span>📚 12 chapters</span>
-                <span>🎥 0 videos</span>
-              </div>
-            </div>
-
-            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 cursor-pointer" onclick="openProject(3)">
-              <div class="flex justify-between items-start mb-4">
-                <div class="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center text-2xl">💕</div>
-                <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded">Completed</span>
-              </div>
-              <h3 class="font-bold text-lg mb-2">Love Story</h3>
-              <p class="text-gray-400 text-sm mb-4">Romantic short drama</p>
-              <div class="flex justify-between text-sm text-gray-500">
-                <span>📚 3 chapters</span>
-                <span>🎥 6 videos</span>
-              </div>
-            </div>
+          <div id="projectsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="text-gray-400 col-span-3">Loading projects...</div>
           </div>
         </div>
 
-        <!-- Story Import Section -->
+        <!-- Story Import -->
         <div id="novelsSection" class="section hidden">
           <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-6">
-            <h3 class="font-bold mb-4">📚 Import Story / Novel</h3>
+            <h3 class="font-bold mb-4">📚 Import Story Chapter</h3>
             <div class="space-y-4">
               <div>
+                <label class="block text-sm text-gray-400 mb-2">Project</label>
+                <select id="novelProjectSelect" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                  <option>Select project...</option>
+                </select>
+              </div>
+              <div>
                 <label class="block text-sm text-gray-400 mb-2">Chapter Title</label>
-                <input type="text" placeholder="Chapter 1: The Beginning" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                <input type="text" id="chapterTitle" placeholder="Chapter 1: The Beginning" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Chapter Number</label>
+                <input type="number" id="chapterIndex" value="1" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
               </div>
               <div>
                 <label class="block text-sm text-gray-400 mb-2">Story Content</label>
-                <textarea rows="10" placeholder="Paste your story content here..." class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white"></textarea>
+                <textarea id="chapterContent" rows="10" placeholder="Paste your story content here..." class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white"></textarea>
               </div>
-              <div class="flex space-x-4">
-                <button class="gradient-bg px-6 py-2 rounded-lg font-medium">Import Chapter</button>
-                <button class="bg-gray-700 px-6 py-2 rounded-lg font-medium">Upload File</button>
-              </div>
+              <button onclick="importChapter()" class="gradient-bg px-6 py-2 rounded-lg font-medium">Import Chapter</button>
             </div>
+          </div>
+          
+          <h3 class="font-bold mb-4">Imported Chapters</h3>
+          <div id="chaptersList" class="space-y-3">
+            <div class="text-gray-400">No chapters imported yet</div>
           </div>
         </div>
 
-        <!-- Storyboard Section -->
+        <!-- Storyboard -->
         <div id="outlinesSection" class="section hidden">
           <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-6">
-            <h3 class="font-bold mb-4">🎬 Episode Outline / Storyboard</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <h3 class="font-bold mb-4">🎬 Create Episode Outline</h3>
+            <div class="space-y-4">
               <div>
-                <label class="block text-sm text-gray-400 mb-2">Episode Title</label>
-                <input type="text" placeholder="Episode 1: The Awakening" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                <label class="block text-sm text-gray-400 mb-2">Project</label>
+                <select id="outlineProjectSelect" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                  <option>Select project...</option>
+                </select>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm text-gray-400 mb-2">Episode Title</label>
+                  <input type="text" id="episodeTitle" placeholder="Episode 1" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                </div>
+                <div>
+                  <label class="block text-sm text-gray-400 mb-2">Episode Number</label>
+                  <input type="number" id="episodeNumber" value="1" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                </div>
               </div>
               <div>
-                <label class="block text-sm text-gray-400 mb-2">Episode Number</label>
-                <input type="number" value="1" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                <label class="block text-sm text-gray-400 mb-2">Summary</label>
+                <textarea id="episodeSummary" rows="3" placeholder="Brief summary..." class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white"></textarea>
               </div>
-            </div>
-            <div class="mb-4">
-              <label class="block text-sm text-gray-400 mb-2">Summary</label>
-              <textarea rows="3" placeholder="Brief summary of this episode..." class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white"></textarea>
+              <div id="scenesContainer" class="space-y-4">
+                <h4 class="font-medium">Scenes</h4>
+                <div class="scene-item bg-gray-900 rounded-lg p-4 border border-gray-600">
+                  <div class="grid grid-cols-2 gap-4 mb-2">
+                    <input type="text" placeholder="Scene Title" class="scene-title bg-gray-800 rounded px-3 py-2 text-white">
+                    <select class="scene-time bg-gray-800 rounded px-3 py-2 text-white">
+                      <option>Day</option>
+                      <option>Night</option>
+                      <option>Sunset</option>
+                    </select>
+                  </div>
+                  <input type="text" placeholder="Characters (comma separated)" class="scene-characters bg-gray-800 rounded px-3 py-2 text-white w-full mb-2">
+                  <textarea placeholder="Scene description..." class="scene-description bg-gray-800 rounded px-3 py-2 text-white w-full" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="flex space-x-4">
+                <button onclick="addScene()" class="bg-gray-700 px-4 py-2 rounded-lg text-sm">+ Add Scene</button>
+                <button onclick="createOutline()" class="gradient-bg px-6 py-2 rounded-lg font-medium">Create Outline</button>
+              </div>
             </div>
           </div>
-
-          <h3 class="font-bold mb-4">Scene Breakdown</h3>
-          <div class="space-y-4">
-            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
-              <div class="flex justify-between items-start mb-4">
-                <div class="flex items-center">
-                  <span class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center text-sm font-bold mr-3">1</span>
-                  <input type="text" value="Opening Scene" class="bg-transparent font-bold text-lg border-b border-gray-600 focus:border-purple-500 outline-none">
-                </div>
-              </div>
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div>
-                  <label class="block text-xs text-gray-500 mb-1">Time</label>
-                  <select class="w-full bg-gray-900 rounded px-3 py-2 text-sm">
-                    <option>Night</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-xs text-gray-500 mb-1">Location</label>
-                  <input type="text" value="City Street" class="w-full bg-gray-900 rounded px-3 py-2 text-sm">
-                </div>
-                <div class="col-span-2">
-                  <label class="block text-xs text-gray-500 mb-1">Characters</label>
-                  <input type="text" value="Protagonist, Stranger" class="w-full bg-gray-900 rounded px-3 py-2 text-sm">
-                </div>
-              </div>
-            </div>
-
-            <button class="w-full py-3 border-2 border-dashed border-gray-600 rounded-xl text-gray-400 hover:border-purple-500 hover:text-purple-400 transition">
-              + Add Scene
-            </button>
+          
+          <h3 class="font-bold mb-4">Outlines</h3>
+          <div id="outlinesList" class="space-y-3">
+            <div class="text-gray-400">No outlines created yet</div>
           </div>
         </div>
 
-        <!-- Script Section -->
+        <!-- Scripts -->
         <div id="scriptsSection" class="section hidden">
           <div class="flex justify-between items-center mb-6">
-            <h3 class="font-bold">📝 Script with Storyboard Shots</h3>
-            <button class="gradient-bg px-4 py-2 rounded-lg text-sm">Generate from Outline</button>
+            <h3 class="font-bold">📝 Scripts with Shot Lists</h3>
+            <button onclick="generateScript()" class="gradient-bg px-4 py-2 rounded-lg text-sm">Generate from Outline</button>
           </div>
 
-          <div class="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-3 grid grid-cols-12 gap-4 text-sm font-medium text-gray-400">
-              <div class="col-span-1">#</div>
-              <div class="col-span-2">Scene</div>
-              <div class="col-span-1">Time</div>
-              <div class="col-span-2">Camera</div>
-              <div class="col-span-3">Action</div>
-              <div class="col-span-2">Dialogue</div>
-              <div class="col-span-1">BGM</div>
-            </div>
-
-            <div class="px-6 py-4 grid grid-cols-12 gap-4 border-b border-gray-700 items-center">
-              <div class="col-span-1 font-bold">1</div>
-              <div class="col-span-2"><input type="text" value="Opening" class="w-full bg-transparent border-b border-gray-600 focus:border-purple-500 outline-none"></div>
-              <div class="col-span-1"><select class="w-full bg-gray-900 rounded px-2 py-1 text-sm"><option>Night</option></select></div>
-              <div class="col-span-2"><select class="w-full bg-gray-900 rounded px-2 py-1 text-sm"><option>Medium</option></select></div>
-              <div class="col-span-3"><input type="text" value="Protagonist walks through rain" class="w-full bg-transparent text-sm"></div>
-              <div class="col-span-2"><input type="text" value="Where am I?" class="w-full bg-transparent text-sm"></div>
-              <div class="col-span-1"><span class="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded">Tense</span></div>
-            </div>
+          <div id="scriptsList" class="space-y-4">
+            <div class="text-gray-400">No scripts yet. Create an outline first, then generate a script.</div>
           </div>
         </div>
 
-        <!-- Video Generation Section -->
+        <!-- Video Generation -->
         <div id="videosSection" class="section hidden">
           <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-6">
             <h3 class="font-bold mb-4">🎥 Generate Video</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div>
                 <label class="block text-sm text-gray-400 mb-2">AI Model</label>
-                <select class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
-                  <option>豆包 Seedance</option>
-                  <option>Runway Gen-3</option>
-                  <option>Pika 1.5</option>
-                  <option>Kling 1.5</option>
+                <select id="videoModel" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                  <option value="doubao">豆包 Seedance</option>
+                  <option value="runway">Runway Gen-3</option>
+                  <option value="pika">Pika 1.5</option>
+                  <option value="kling">Kling 1.5</option>
                 </select>
               </div>
               <div>
-                <label class="block text-sm text-gray-400 mb-2">Duration</label>
-                <select class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
-                  <option>10 seconds</option>
-                  <option selected>30 seconds</option>
-                  <option>60 seconds</option>
+                <label class="block text-sm text-gray-400 mb-2">Script</label>
+                <select id="videoScriptSelect" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                  <option>Select script...</option>
                 </select>
               </div>
               <div>
                 <label class="block text-sm text-gray-400 mb-2">Style</label>
-                <select class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
-                  <option>Cyberpunk</option>
-                  <option>Anime</option>
+                <select id="videoStyle" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
                   <option>Cinematic</option>
+                  <option>Anime</option>
+                  <option>Cyberpunk</option>
+                  <option>Realistic</option>
                 </select>
               </div>
             </div>
-            <button onclick="generateVideo()" class="gradient-bg px-8 py-3 rounded-lg font-bold hover:opacity-90 transition">
+            
+            <div class="mb-4">
+              <label class="block text-sm text-gray-400 mb-2">Custom Prompt (Optional)</label>
+              <textarea id="videoPrompt" rows="3" placeholder="Additional prompt details..." class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white"></textarea>
+            </div>
+            
+            <button onclick="generateVideo()" id="generateVideoBtn" class="gradient-bg px-8 py-3 rounded-lg font-bold hover:opacity-90 transition">
               🚀 Start Generation
             </button>
           </div>
+          
+          <h3 class="font-bold mb-4">Generated Videos</h3>
+          <div id="videosList" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="text-gray-400 col-span-2">No videos generated yet</div>
+          </div>
         </div>
 
-        <!-- Settings Section -->
+        <!-- Settings -->
         <div id="settingsSection" class="section hidden">
           <div class="max-w-2xl">
             <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-6">
@@ -304,16 +258,16 @@
                   <div class="grid grid-cols-2 gap-4">
                     <div>
                       <label class="block text-sm text-gray-400 mb-2">Provider</label>
-                      <select class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
-                        <option>OpenAI</option>
-                        <option>DeepSeek</option>
-                        <option>Claude</option>
-                        <option>Gemini</option>
+                      <select id="textProvider" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                        <option value="openai">OpenAI</option>
+                        <option value="deepseek">DeepSeek</option>
+                        <option value="anthropic">Claude</option>
+                        <option value="google">Gemini</option>
                       </select>
                     </div>
                     <div class="col-span-2">
                       <label class="block text-sm text-gray-400 mb-2">API Key</label>
-                      <input type="password" placeholder="sk-..." class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                      <input type="password" id="textApiKey" placeholder="sk-..." class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
                     </div>
                   </div>
                 </div>
@@ -323,16 +277,16 @@
                   <div class="grid grid-cols-2 gap-4">
                     <div>
                       <label class="block text-sm text-gray-400 mb-2">Provider</label>
-                      <select class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
-                        <option>豆包 Seedance</option>
-                        <option>Runway</option>
-                        <option>Pika</option>
-                        <option>Kling</option>
+                      <select id="videoProvider" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                        <option value="doubao">豆包 Seedance</option>
+                        <option value="runway">Runway</option>
+                        <option value="pika">Pika</option>
+                        <option value="kling">Kling</option>
                       </select>
                     </div>
                     <div class="col-span-2">
                       <label class="block text-sm text-gray-400 mb-2">API Key</label>
-                      <input type="password" placeholder="Your video API key" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                      <input type="password" id="videoApiKey" placeholder="Your video API key" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
                     </div>
                   </div>
                 </div>
@@ -349,8 +303,50 @@
     </main>
   </div>
 
+  <!-- Create Project Modal -->
+  <div id="createProjectModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-gray-800 rounded-2xl p-6 max-w-md w-full border border-gray-700">
+      <h3 class="font-bold text-xl mb-4">Create New Project</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm text-gray-400 mb-2">Project Name</label>
+          <input type="text" id="newProjectName" placeholder="My Awesome Story" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-400 mb-2">Description</label>
+          <textarea id="newProjectDesc" rows="3" placeholder="Brief description..." class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-white"></textarea>
+        </div>
+      </div>
+      <div class="flex space-x-4 mt-6">
+        <button onclick="closeModal()" class="flex-1 bg-gray-700 py-2 rounded-lg">Cancel</button>
+        <button onclick="submitCreateProject()" class="flex-1 gradient-bg py-2 rounded-lg font-medium">Create</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    const API_BASE = '';
     let isDemo = true;
+    let projects = [];
+    let novels = [];
+    let outlines = [];
+    let scripts = [];
+    let videos = [];
+    let currentProject = null;
+
+    // Check connection on load
+    window.onload = async function() {
+      try {
+        const res = await fetch(`${API_BASE}/api/health`);
+        const data = await res.json();
+        document.getElementById('connectionStatus').innerHTML = 
+          '<span class="text-green-400">✓ Backend connected</span>';
+        loadProjects();
+      } catch (e) {
+        document.getElementById('connectionStatus').innerHTML = 
+          '<span class="text-red-400">✗ Backend offline</span>';
+      }
+    };
 
     function enterAdmin() {
       document.getElementById('loginScreen').classList.add('hidden');
@@ -358,6 +354,7 @@
       isDemo = false;
       document.getElementById('modeIndicator').innerHTML = '● Live Mode';
       document.getElementById('modeIndicator').className = 'text-xs text-green-400';
+      loadAllData();
     }
 
     function enterDemo() {
@@ -366,14 +363,407 @@
       isDemo = true;
       document.getElementById('modeIndicator').innerHTML = '● Demo Mode';
       document.getElementById('modeIndicator').className = 'text-xs text-yellow-400';
-      alert('👀 Demo Mode: All features available, but video generation uses sample data.');
+      // Load demo data
+      projects = [
+        { id: 1, name: 'Cyberpunk Dreams', description: 'AI cyberpunk story', created_at: new Date().toISOString() },
+        { id: 2, name: 'Fantasy Kingdom', description: 'Epic adventure', created_at: new Date().toISOString() }
+      ];
+      renderProjects();
+      updateProjectSelects();
+    }
+
+    async function loadAllData() {
+      await loadProjects();
+      await loadNovels();
+      await loadOutlines();
+      await loadScripts();
+      await loadVideos();
+    }
+
+    async function loadProjects() {
+      try {
+        const res = await fetch(`${API_BASE}/api/projects`);
+        projects = await res.json();
+        renderProjects();
+        updateProjectSelects();
+      } catch (e) {
+        console.error('Failed to load projects', e);
+      }
+    }
+
+    function renderProjects() {
+      const container = document.getElementById('projectsList');
+      if (projects.length === 0) {
+        container.innerHTML = '<div class="text-gray-400 col-span-3">No projects yet. Click "Create New" to start.</div>';
+        return;
+      }
+      
+      container.innerHTML = projects.map(p => `
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 cursor-pointer hover:border-purple-500 transition" onclick="selectProject(${p.id})">
+          <div class="flex justify-between items-start mb-4">
+            <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center text-2xl">🎬</div>
+            <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded">Active</span>
+          </div>
+          <h3 class="font-bold text-lg mb-2">${p.name}</h3>
+          <p class="text-gray-400 text-sm mb-4">${p.description || 'No description'}</p>
+          <div class="flex justify-between text-sm text-gray-500">
+            <span>📚 ${p.chapter_count || 0} chapters</span>
+            <span>🎥 ${p.video_count || 0} videos</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateProjectSelects() {
+      const options = ['<option value="">Select project...</option>', 
+        ...projects.map(p => `<option value="${p.id}">${p.name}</option>`)
+      ].join('');
+      
+      document.getElementById('novelProjectSelect').innerHTML = options;
+      document.getElementById('outlineProjectSelect').innerHTML = options;
+    }
+
+    function selectProject(id) {
+      currentProject = id;
+      showSection('novels');
+    }
+
+    async function loadNovels() {
+      if (!currentProject) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/novels/${currentProject}`);
+        novels = await res.json();
+        renderChapters();
+      } catch (e) {
+        console.error('Failed to load novels', e);
+      }
+    }
+
+    function renderChapters() {
+      const container = document.getElementById('chaptersList');
+      if (novels.length === 0) {
+        container.innerHTML = '<div class="text-gray-400">No chapters imported yet</div>';
+        return;
+      }
+      
+      container.innerHTML = novels.map(n => `
+        <div class="bg-gray-800 rounded-lg p-4 border border-gray-700">
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="font-medium">${n.title}</div>
+              <div class="text-sm text-gray-400">${n.content?.length || 0} chars · Chapter ${n.chapter_index}</div>
+            </div>
+            <button onclick="deleteNovel(${n.id})" class="text-red-400 hover:text-red-300">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function importChapter() {
+      const projectId = document.getElementById('novelProjectSelect').value;
+      const title = document.getElementById('chapterTitle').value;
+      const content = document.getElementById('chapterContent').value;
+      const chapterIndex = document.getElementById('chapterIndex').value;
+      
+      if (!projectId || !title || !content) {
+        alert('Please fill in all fields');
+        return;
+      }
+      
+      if (isDemo) {
+        novels.push({ id: Date.now(), project_id: projectId, title, content, chapter_index: chapterIndex });
+        renderChapters();
+        alert('✅ Demo: Chapter imported');
+        return;
+      }
+      
+      try {
+        const res = await fetch(`${API_BASE}/api/novels`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ project_id: projectId, title, content, chapter_index: chapterIndex })
+        });
+        
+        if (res.ok) {
+          await loadNovels();
+          document.getElementById('chapterTitle').value = '';
+          document.getElementById('chapterContent').value = '';
+          alert('✅ Chapter imported successfully');
+        }
+      } catch (e) {
+        alert('❌ Failed to import chapter');
+      }
+    }
+
+    async function loadOutlines() {
+      if (!currentProject) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/outlines/${currentProject}`);
+        outlines = await res.json();
+        renderOutlines();
+      } catch (e) {
+        console.error('Failed to load outlines', e);
+      }
+    }
+
+    function renderOutlines() {
+      const container = document.getElementById('outlinesList');
+      if (outlines.length === 0) {
+        container.innerHTML = '<div class="text-gray-400">No outlines created yet</div>';
+        return;
+      }
+      
+      container.innerHTML = outlines.map(o => `
+        <div class="bg-gray-800 rounded-lg p-4 border border-gray-700">
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="font-medium">${o.title}</div>
+              <div class="text-sm text-gray-400">Episode ${o.episode} · ${(o.scenes?.length || 0)} scenes</div>
+            </div>
+            <button onclick="generateScriptFromOutline(${o.id})" class="gradient-bg px-3 py-1 rounded text-sm">Generate Script</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addScene() {
+      const container = document.getElementById('scenesContainer');
+      const div = document.createElement('div');
+      div.className = 'scene-item bg-gray-900 rounded-lg p-4 border border-gray-600';
+      div.innerHTML = `
+        <div class="grid grid-cols-2 gap-4 mb-2">
+          <input type="text" placeholder="Scene Title" class="scene-title bg-gray-800 rounded px-3 py-2 text-white">
+          <select class="scene-time bg-gray-800 rounded px-3 py-2 text-white">
+            <option>Day</option>
+            <option>Night</option>
+            <option>Sunset</option>
+          </select>
+        </div>
+        <input type="text" placeholder="Characters" class="scene-characters bg-gray-800 rounded px-3 py-2 text-white w-full mb-2">
+        <textarea placeholder="Description" class="scene-description bg-gray-800 rounded px-3 py-2 text-white w-full" rows="2"></textarea>
+      `;
+      container.appendChild(div);
+    }
+
+    async function createOutline() {
+      const projectId = document.getElementById('outlineProjectSelect').value;
+      const title = document.getElementById('episodeTitle').value;
+      const episode = document.getElementById('episodeNumber').value;
+      const summary = document.getElementById('episodeSummary').value;
+      
+      if (!projectId || !title) {
+        alert('Please select project and enter title');
+        return;
+      }
+      
+      // Collect scenes
+      const scenes = [];
+      document.querySelectorAll('.scene-item').forEach(item => {
+        scenes.push({
+          title: item.querySelector('.scene-title').value,
+          time: item.querySelector('.scene-time').value,
+          characters: item.querySelector('.scene-characters').value.split(',').map(s => s.trim()).filter(Boolean),
+          description: item.querySelector('.scene-description').value
+        });
+      });
+      
+      if (isDemo) {
+        outlines.push({ id: Date.now(), title, episode, summary, scenes });
+        renderOutlines();
+        alert('✅ Demo: Outline created');
+        return;
+      }
+      
+      try {
+        const res = await fetch(`${API_BASE}/api/outlines`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ project_id: projectId, title, episode, summary, scenes })
+        });
+        
+        if (res.ok) {
+          await loadOutlines();
+          alert('✅ Outline created');
+        }
+      } catch (e) {
+        alert('❌ Failed to create outline');
+      }
+    }
+
+    async function loadScripts() {
+      if (!currentProject) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/scripts/${currentProject}`);
+        scripts = await res.json();
+        renderScripts();
+        updateScriptSelect();
+      } catch (e) {
+        console.error('Failed to load scripts', e);
+      }
+    }
+
+    function renderScripts() {
+      const container = document.getElementById('scriptsList');
+      if (scripts.length === 0) {
+        container.innerHTML = '<div class="text-gray-400">No scripts yet. Create an outline first.</div>';
+        return;
+      }
+      
+      container.innerHTML = scripts.map(s => `
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <h4 class="font-bold">${s.title}</h4>
+              <div class="text-sm text-gray-400">Episode ${s.episode} · ${(s.shots?.length || 0)} shots</div>
+            </div>
+            <button onclick="deleteScript(${s.id})" class="text-red-400">🗑️</button>
+          </div>
+          <pre class="bg-gray-900 rounded-lg p-4 text-sm text-gray-300 overflow-auto max-h-64">${s.content || 'No content'}</pre>
+        </div>
+      `).join('');
+    }
+
+    function updateScriptSelect() {
+      const options = ['<option>Select script...</option>', 
+        ...scripts.map(s => `<option value="${s.id}">${s.title}</option>`)
+      ].join('');
+      document.getElementById('videoScriptSelect').innerHTML = options;
+    }
+
+    async function generateScript() {
+      if (!currentProject) {
+        alert('Select a project first');
+        return;
+      }
+      
+      if (outlines.length === 0) {
+        alert('Create an outline first');
+        return;
+      }
+      
+      const outlineId = outlines[0].id;
+      
+      if (isDemo) {
+        scripts.push({
+          id: Date.now(),
+          title: 'Generated Script',
+          episode: 1,
+          content: '※ Scene 1 - Night\n$ Protagonist\n【BGM】Tense\n△ Medium Shot\nProtagonist walks through rain...',
+          shots: [{ shot_number: 1, scene: 'Opening', time: 'Night', camera: 'Medium', action: 'Walks in rain' }]
+        });
+        renderScripts();
+        updateScriptSelect();
+        alert('✅ Demo: Script generated');
+        return;
+      }
+      
+      try {
+        const res = await fetch(`${API_BASE}/api/scripts/generate-from-outline`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ project_id: currentProject, outline_id: outlineId })
+        });
+        
+        if (res.ok) {
+          await loadScripts();
+          alert('✅ Script generated');
+        }
+      } catch (e) {
+        alert('❌ Failed to generate script');
+      }
+    }
+
+    async function loadVideos() {
+      if (!currentProject) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/videos/${currentProject}`);
+        videos = await res.json();
+        renderVideos();
+      } catch (e) {
+        console.error('Failed to load videos', e);
+      }
+    }
+
+    function renderVideos() {
+      const container = document.getElementById('videosList');
+      if (videos.length === 0) {
+        container.innerHTML = '<div class="text-gray-400 col-span-2">No videos generated yet</div>';
+        return;
+      }
+      
+      container.innerHTML = videos.map(v => `
+        <div class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700">
+          <div class="aspect-video bg-gray-700 flex items-center justify-center">
+            ${v.url ? `<video src="${v.url}" controls class="w-full h-full"></video>` : '<div class="text-gray-500">Processing...</div>'}
+          </div>
+          <div class="p-4">
+            <div class="flex justify-between items-start mb-2">
+              <h4 class="font-bold">${v.model || 'Video'}</h4>
+              <span class="px-2 py-1 ${v.status === 'completed' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'} text-xs rounded">${v.status}</span>
+            </div>
+            <p class="text-sm text-gray-400">${v.style || 'Default style'}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function generateVideo() {
+      const model = document.getElementById('videoModel').value;
+      const scriptId = document.getElementById('videoScriptSelect').value;
+      const style = document.getElementById('videoStyle').value;
+      const prompt = document.getElementById('videoPrompt').value;
+      
+      if (!scriptId) {
+        alert('Please select a script');
+        return;
+      }
+      
+      const btn = document.getElementById('generateVideoBtn');
+      btn.disabled = true;
+      btn.innerHTML = '⏳ Generating...';
+      
+      if (isDemo) {
+        setTimeout(() => {
+          videos.push({
+            id: Date.now(),
+            model,
+            style,
+            status: 'completed',
+            url: 'https://videos.pexels.com/video-files/856973/856973-hd_1920_1080_30fps.mp4'
+          });
+          renderVideos();
+          btn.disabled = false;
+          btn.innerHTML = '🚀 Start Generation';
+          alert('✅ Demo: Video generated');
+        }, 3000);
+        return;
+      }
+      
+      try {
+        const res = await fetch(`${API_BASE}/api/videos/generate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ project_id: currentProject, script_id: scriptId, model, style, prompt })
+        });
+        
+        if (res.ok) {
+          await loadVideos();
+          alert('✅ Video generation started');
+        }
+      } catch (e) {
+        alert('❌ Failed to start generation');
+      }
+      
+      btn.disabled = false;
+      btn.innerHTML = '🚀 Start Generation';
     }
 
     function showSection(section) {
       document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
       document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+      
       document.getElementById(section + 'Section').classList.remove('hidden');
-      event.target.closest('.sidebar-item').classList.add('active');
+      document.querySelector(`[data-section="${section}"]`).classList.add('active');
       
       const titles = {
         'projects': 'Projects',
@@ -384,36 +774,82 @@
         'settings': 'Settings'
       };
       document.getElementById('pageTitle').textContent = titles[section];
+      
+      // Load data when section shown
+      if (section === 'novels') loadNovels();
+      if (section === 'outlines') loadOutlines();
+      if (section === 'scripts') loadScripts();
+      if (section === 'videos') loadVideos();
     }
 
     function createNew() {
-      const name = prompt('Enter project name:');
-      if (name) {
-        alert('Creating project: ' + name);
+      document.getElementById('createProjectModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('createProjectModal').classList.add('hidden');
+    }
+
+    async function submitCreateProject() {
+      const name = document.getElementById('newProjectName').value;
+      const description = document.getElementById('newProjectDesc').value;
+      
+      if (!name) {
+        alert('Please enter project name');
+        return;
       }
-    }
-
-    function openProject(id) {
-      alert('Opening Project ' + id);
-    }
-
-    function generateVideo() {
+      
       if (isDemo) {
-        alert('🎬 Demo Mode: Video generation simulation started!');
-        setTimeout(() => {
-          alert('✅ Demo video completed!');
-        }, 2000);
-      } else {
-        alert('🚀 Starting real video generation...');
+        projects.push({ id: Date.now(), name, description });
+        renderProjects();
+        updateProjectSelects();
+        closeModal();
+        alert('✅ Demo: Project created');
+        return;
+      }
+      
+      try {
+        const res = await fetch(`${API_BASE}/api/projects`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, description })
+        });
+        
+        if (res.ok) {
+          await loadProjects();
+          closeModal();
+          document.getElementById('newProjectName').value = '';
+          document.getElementById('newProjectDesc').value = '';
+          alert('✅ Project created');
+        }
+      } catch (e) {
+        alert('❌ Failed to create project');
       }
     }
 
     function saveSettings() {
-      alert('✅ Settings saved!');
+      const config = {
+        textProvider: document.getElementById('textProvider').value,
+        textApiKey: document.getElementById('textApiKey').value,
+        videoProvider: document.getElementById('videoProvider').value,
+        videoApiKey: document.getElementById('videoApiKey').value
+      };
+      localStorage.setItem('kev-clip-config', JSON.stringify(config));
+      alert('✅ Settings saved');
     }
 
     function testConnection() {
-      alert('🧪 Testing API connections...');
+      alert('🧪 Testing API connections...\n\nDemo: Simulating connection test');
+    }
+
+    // Load saved settings
+    const saved = localStorage.getItem('kev-clip-config');
+    if (saved) {
+      const config = JSON.parse(saved);
+      document.getElementById('textProvider').value = config.textProvider || 'openai';
+      document.getElementById('videoProvider').value = config.videoProvider || 'doubao';
+      if (config.textApiKey) document.getElementById('textApiKey').value = config.textApiKey;
+      if (config.videoApiKey) document.getElementById('videoApiKey').value = config.videoApiKey;
     }
   </script>
 </body>
