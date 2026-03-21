@@ -497,6 +497,10 @@
         <button onclick="saveConfig()" class="w-full gradient-bg py-4 rounded-xl font-bold text-lg hover:opacity-90 transition">
           🚀 Launch My AI Studio
         </button>
+        
+        <button onclick="enterDemoMode()" class="w-full mt-3 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-gray-800 transition text-sm i18n-skip-config">
+          👀 Skip for now — Explore in Demo Mode
+        </button>
       </div>
     </div>
   </div>
@@ -550,7 +554,8 @@
         'faq3-a': 'Absolutely. Your API keys are stored only in your browser\'s local storage. We never see or store them on our servers.',
         'cta-title': 'Ready to Create Something Amazing?',
         'cta-desc': 'Join thousands of creators turning their ideas into stunning videos',
-        'cta-btn': '🚀 Start Creating Now — It\'s Free'
+        'cta-btn': '🚀 Start Creating Now — It\'s Free',
+        'skip-config': '👀 Skip for now — Explore in Demo Mode'
       },
       zh: {
         subtitle: 'AI 视频工作室',
@@ -598,7 +603,8 @@
         'faq3-a': '绝对安全。你的 API 密钥仅存储在浏览器的本地存储中。我们永远不会看到或在我们的服务器上存储它们。',
         'cta-title': '准备好创作令人惊叹的作品了吗？',
         'cta-desc': '加入数千名将想法变成惊艳视频的创作者',
-        'cta-btn': '🚀 立即开始创作 — 免费'
+        'cta-btn': '🚀 立即开始创作 — 免费',
+        'skip-config': '👀 先跳过 — 以演示模式探索'
       }
     };
 
@@ -681,6 +687,31 @@
       userConfig = config;
       closeConfig();
       alert(currentLang === 'zh' ? '✅ 配置已保存！' : '✅ Configuration saved!');
+    }
+
+    // Enter demo mode without API keys
+    function enterDemoMode() {
+      const demoConfig = {
+        textProvider: 'openai',
+        textKey: '',
+        videoProvider: 'doubao',
+        videoKey: '',
+        demoMode: true
+      };
+      
+      localStorage.setItem('kev-clip-config', JSON.stringify(demoConfig));
+      userConfig = demoConfig;
+      closeConfig();
+      
+      const msg = currentLang === 'zh' 
+        ? '👀 演示模式已启动！您可以探索所有功能。要生成真实视频，请在设置中配置 API 密钥。' 
+        : '👀 Demo mode activated! You can explore all features. To generate real videos, configure API keys in settings.';
+      alert(msg);
+    }
+
+    // Check if in demo mode
+    function isDemoMode() {
+      return userConfig && userConfig.demoMode === true;
     }
 
     // Initialize
