@@ -1,0 +1,20 @@
+{
+  "name": "kev-clip",
+  "version": "1.0.0",
+  "description": "AI Video Generation Studio - Story import, storyboard, script, video",
+  "install": {
+    "type": "git",
+    "url": "https://github.com/KevPH2026/kev-clip.git",
+    "branch": "main"
+  },
+  "scripts": {
+    "postInstall": "npm install",
+    "start": "npm start",
+    "stop": "pkill -f 'node src/app.js' || true"
+  },
+  "ports": [3000],
+  "urls": {
+    "landing": "http://localhost:3000",
+    "admin": "http://localhost:3000/admin.html"
+  }
+}

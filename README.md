@@ -2,214 +2,125 @@
 
 > "Watch what you want, clip it yourself"
 
-AI-powered video generation for everyone. Build your own AI video studio in 3 minutes.
+AI-powered video generation studio with complete workflow: story import → storyboard → script → video.
 
-[🎮 Live Demo](https://k-clip.superk.ai) · [📖 Documentation](https://docs.kev-clip.com) · [🐛 Issues](https://github.com/KevPH2026/kev-clip/issues)
-
-![Demo](https://raw.githubusercontent.com/KevPH2026/kev-clip/main/docs/assets/demo.gif)
+[🚀 Live Demo](https://kev-clip.onrender.com) · [📖 Docs](./docs) · [🐛 Issues](https://github.com/KevPH2026/kev-clip/issues)
 
 ## ✨ Features
 
-- 🚀 **Zero-config startup** — Interactive CLI wizard, no manual `.env` editing
-- 🔐 **Flexible auth** — OAuth or API key for all providers
-- 🌍 **15+ Text models** — OpenAI, Claude, Gemini, DeepSeek, MiniMax, Qwen, GLM, Kimi...
-- 🎬 **9+ Video models** — Runway, Pika, Kling, Doubao, Wanxiang, Vidu...
-- ⚡ **Streaming generation** — Real-time progress via WebSocket
-- 🎞️ **Auto video stitching** — Merge 10s clips into 60s seamless videos
-- 📱 **Mobile-first** — Works on your phone, PWA-ready
-- 🔒 **Privacy-first** — Your API keys, your data, stored locally
+- 📚 **Story Import** - Upload novels chapter by chapter
+- 🎬 **Storyboard** - Visual scene breakdown with characters
+- 📝 **Script/Shots** - Generate detailed shot lists
+- 🎥 **Video Generation** - 9 AI models (OpenAI, Claude, DeepSeek, Runway, Pika, etc.)
+- 🖥️ **Admin Dashboard** - Full-featured management interface
+- 🌐 **Landing Page** - Marketing site included
 
 ## 🚀 Quick Start
 
-### One-Line Install
+### Option 1: One-Line Install (OpenClaw)
 
 ```bash
-npx create-kev-clip my-studio
-cd my-studio
+openclaw install kev-clip
 ```
 
-The interactive wizard will guide you through provider selection and configuration.
+Then open http://localhost:3000 for the landing page and http://localhost:3000/admin.html for the dashboard.
 
-### Manual Install
+### Option 2: Manual Install
 
 ```bash
+# Clone repository
 git clone https://github.com/KevPH2026/kev-clip.git
 cd kev-clip
-npm install      # Launches interactive setup
+
+# Install dependencies (requires Node.js 18-20)
+npm install
+
+# Start the server
 npm start
+
+# Open browser
+open http://localhost:3000        # Landing page
+open http://localhost:3000/admin.html  # Admin dashboard
 ```
 
-Then open http://localhost:3000
+### Option 3: Using npx
 
-### One-Click Deploy
-
-[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/KevPH2026/kev-clip)
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/kev-clip)
-[![Deploy on Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/KevPH2026/kev-clip)
-
-## 🤖 Supported AI Models
-
-### Text Generation (Script & Outline)
-
-| Provider | Models | Auth | Region |
-|----------|--------|------|--------|
-| **OpenAI** | GPT-4, GPT-4o, GPT-4o-mini | OAuth / API Key | 🌍 Global |
-| **Anthropic** | Claude 3, Claude 3.5 | API Key | 🌍 Global |
-| **Google** | Gemini Pro, Gemini Ultra | OAuth / API Key | 🌍 Global |
-| **X.AI** | Grok | API Key | 🌍 Global |
-| **DeepSeek** | V2, V3, R1 | API Key | 🇨🇳 China |
-| **MiniMax** | abab6.5, abab6 | API Key | 🇨🇳 China |
-| **Alibaba** | Qwen-Max, Qwen-Plus, Qwen-Turbo | API Key | 🇨🇳 China |
-| **Zhipu** | GLM-4, GLM-4V | API Key | 🇨🇳 China |
-| **Moonshot** | Kimi, Kimi-VL | API Key | 🇨🇳 China |
-| **Baidu** | Ernie Bot, Ernie 4.0 | OAuth / API Key | 🇨🇳 China |
-| **Tencent** | Hunyuan | API Key | 🇨🇳 China |
-| **ByteDance** | Doubao-Lite, Doubao-Pro | API Key | 🇨🇳 China |
-| **01.AI** | Yi-34B, Yi-VL | API Key | 🇨🇳 China |
-
-### Video Generation
-
-| Provider | Models | Auth | Region |
-|----------|--------|------|--------|
-| **Runway** | Gen-2, Gen-3 Alpha | API Key | 🌍 Global |
-| **Pika** | Pika 1.0, Pika 1.5 | API Key | 🌍 Global |
-| **Kling** | Kling 1.0, Kling 1.5 | API Key | 🌍 Global / 🇨🇳 China |
-| **Luma** | Dream Machine | API Key | 🌍 Global |
-| **Doubao** | Seedance | API Key | 🇨🇳 China |
-| **Wanxiang** | Tongyi Wanxiang | API Key | 🇨🇳 China |
-| **Vidu** | Vidu 1.0 | API Key | 🇨🇳 China |
-| **HiDream** | HiDream.ai | API Key | 🇨🇳 China |
-
-## 📖 How It Works
-
-```
-Input: "Cyberpunk girl fighting robots in neon rain"
-   ↓
-AI generates script → Storyboard → Video segments
-   ↓
-Auto-stitch into 60s video with audio
+```bash
+npx kev-clip
 ```
 
-## 🏗️ Architecture
+## 📁 Project Structure
 
 ```
-Input (one sentence)
-    ↓
-Text Adapter (15+ providers)
-    ↓
-Script Generator
-    ↓
-Video Adapter (9+ providers)
-    ↓
-Video Stitcher (FFmpeg)
-    ↓
-Output (60s video)
+kev-clip/
+├── src/
+│   └── app.js              # Express server + API routes
+├── public/
+│   ├── index.html          # Landing page (frontend)
+│   └── admin.html          # Admin dashboard (frontend)
+├── bin/
+│   ├── cli.js              # CLI entry point
+│   └── create.js           # Project creation script
+├── scripts/
+│   ├── setup.js            # Interactive setup wizard
+│   └── verify.js           # Post-install verification
+└── package.json
 ```
 
-See [ARCHITECTURE.md](./docs/ARCHITECTURE.md) for technical details.
+## 🔌 API Endpoints
 
-## 🔐 Authentication Methods
+### Projects
+- `GET /api/projects` - List all projects
+- `POST /api/projects` - Create new project
 
-### OAuth (Recommended)
-No API key management. Just login with your provider account.
+### Story Import
+- `GET /api/novels/:project_id` - Get chapters
+- `POST /api/novels` - Import chapter
 
-Supported: OpenAI, Google, Baidu
+### Storyboard
+- `GET /api/outlines/:project_id` - Get outlines
+- `POST /api/outlines` - Create outline
 
-### API Key
-Enter your API key directly. Keys are stored locally in `~/.kev-clip/`.
+### Scripts
+- `GET /api/scripts/:project_id` - Get scripts
+- `POST /api/scripts` - Create script
+- `POST /api/scripts/generate-from-outline` - AI generate from outline
 
-## 🌍 Internationalization
+### Videos
+- `GET /api/videos/:project_id` - Get videos
+- `POST /api/videos/generate` - Generate video
 
-- 🇺🇸 English (default)
-- 🇨🇳 Chinese ([中文版](./README.zh.md))
+### Health
+- `GET /api/health` - Server status
 
-More languages welcome via PR!
+## ⚙️ Configuration
+
+Create `.env` file:
+
+```env
+PORT=3000
+DB_PATH=./kev-clip.db
+
+# AI Providers (optional for demo mode)
+OPENAI_API_KEY=sk-...
+DEEPSEEK_API_KEY=...
+DOUBAO_API_KEY=...
+RUNWAY_API_KEY=...
+```
 
 ## 🛠️ Development
 
 ```bash
-# Clone
-git clone https://github.com/KevPH2026/kev-clip.git
-cd kev-clip
-
-# Install dependencies
-npm install
-
-# Run development server
+# Run in development mode
 npm run dev
 
 # Run tests
 npm test
+
+# Verify installation
+npm run verify
 ```
-
-## 🤝 Contributing
-
-We welcome contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
-
-### Adding New Providers
-
-Kev-Clip uses an adapter pattern. Adding a new AI provider only requires creating one adapter file:
-
-1. Create `src/adapters/text/{provider}.js` or `src/adapters/video/{provider}.js`
-2. Implement the standard interface
-3. Register in `scripts/setup.js`
-
-That's it — no core code changes needed.
-
-## 📝 Configuration
-
-Configuration is managed automatically by the setup wizard. To reconfigure:
-
-```bash
-npm run setup
-```
-
-Or manually edit `~/.kev-clip/config.json`.
-
-## 🎯 Use Cases
-
-- **Novel writers** — Visualize chapters for promotion
-- **Short video creators** — Generate 10+ clips per day
-- **Tech bloggers** — Demo AI capabilities
-- **Students/Hobbyists** — Learn AI video with zero barrier
-
-## 🆚 vs ToonFlow
-
-| Dimension | ToonFlow | Kev-Clip |
-|-----------|----------|----------|
-| Setup time | 30+ min (manual fixes) | 3 min (one command) |
-| Learning curve | Needs outline/script/storyboard knowledge | One sentence input |
-| Model support | Fixed providers | 15+ global models |
-| Codebase | ~20k lines, complex | ~2k lines, lean |
-| Target users | Professional creators | Everyone |
-
-## 📊 Project Stats
-
-- **Core code**: ~2,000 lines
-- **Dependencies**: 15 (minimal)
-- **Startup time**: <3 seconds
-- **Supported models**: 22 (13 text + 9 video)
-- **License**: MIT
-
-## 🙏 Acknowledgments
-
-Built with:
-- [Express](https://expressjs.com)
-- [Better-SQLite3](https://github.com/WiseLibs/better-sqlite3)
-- [Tailwind CSS](https://tailwindcss.com)
-
-## 📮 Contact
-
-- Issues: [github.com/KevPH2026/kev-clip/issues](https://github.com/KevPH2026/kev-clip/issues)
-- Email: kiven1026@gmail.com
-- Twitter: [@skyerK12](https://x.com/skyerK12)
 
 ## 📄 License
 
-MIT © [Kev](https://github.com/KevPH2026)
-
----
-
-<p align="center">
-  Made with ❤️ by Kev
-</p>
+MIT © Kev
