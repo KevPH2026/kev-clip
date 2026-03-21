@@ -66,15 +66,14 @@ function initDB() {
 }
 
 // Load adapter
-function loadAdapter(type, provider, customKey) {
+function loadAdapter(type, provider, customKey, customModel) {
   try {
     const AdapterClass = require(`./adapters/${type}/${provider}`);
-    if (customKey) {
-      return new AdapterClass({ apiKey: customKey });
+    const config = { apiKey: customKey };
+    if (customModel) {
+      config.model = customModel;
     }
-    // Fallback to env
-    const envKey = type === 'text' ? process.env.TEXT_API_KEY : process.env.VIDEO_API_KEY;
-    return new AdapterClass({ apiKey: envKey });
+    return new AdapterClass(config);
   } catch (e) {
     console.error(`Adapter not found: ${type}/${provider}`);
     return null;
@@ -132,6 +131,7 @@ app.post('/api/scripts/generate', async (req, res) => {
   // Get user's API keys from headers
   const textProvider = req.headers['x-text-provider'] || process.env.TEXT_PROVIDER;
   const textKey = req.headers['x-text-key'] || process.env.TEXT_API_KEY;
+  const textModel = req.headers['x-text-model'];
   
   if (!textKey) {
     return res.status(400).json({ error: 'Text API key required' });
@@ -145,14 +145,14 @@ app.post('/api/scripts/generate', async (req, res) => {
   const scriptId = result.lastInsertRowid;
   
   // Start async generation with user's config and preferences
-  generateScriptAsync(scriptId, prompt, textProvider, textKey, language || 'en', scriptStyle || 'short-drama');
+  generateScriptAsync(scriptId, prompt, textProvider, textKey, textModel, language || 'en', scriptStyle || 'short-drama');
   
   res.json({ id: scriptId, status: 'generating' });
 });
 
-async function generateScriptAsync(scriptId, prompt, textProvider, textKey, language, scriptStyle) {
+async function generateScriptAsync(scriptId, prompt, textProvider, textKey, textModel, language, scriptStyle) {
   try {
-    const adapter = loadAdapter('text', textProvider || process.env.TEXT_PROVIDER, textKey);
+    const adapter = loadAdapter('text', textProvider || process.env.TEXT_PROVIDER, textKey, textModel);
     if (!adapter) throw new Error('Text adapter not found');
     
     // Build system prompt based on language and style
@@ -183,7 +183,6 @@ async function generateScriptAsync(scriptId, prompt, textProvider, textKey, lang
     
     const script = await adapter.generate({
       prompt,
-      model: process.env.TEXT_MODEL,
       system: systemPrompt
     });
     
@@ -220,6 +219,7 @@ app.post('/api/videos/generate', async (req, res) => {
   // Get user's API keys from headers
   const videoProvider = req.headers['x-video-provider'] || process.env.VIDEO_PROVIDER;
   const videoKey = req.headers['x-video-key'] || process.env.VIDEO_API_KEY;
+  const videoModel = req.headers['x-video-model'];
   
   if (!videoKey) {
     return res.status(400).json({ error: 'Video API key required' });
@@ -232,16 +232,16 @@ app.post('/api/videos/generate', async (req, res) => {
   const videoId = result.lastInsertRowid;
   
   // Start async generation with user's config
-  generateVideoAsync(videoId, prompt, segments, videoProvider, videoKey);
+  generateVideoAsync(videoId, prompt, segments, videoProvider, videoKey, videoModel);
   
   res.json({ id: videoId, status: 'pending', segments });
 });
 
-async function generateVideoAsync(videoId, prompt, segments, videoProvider, videoKey) {
+async function generateVideoAsync(videoId, prompt, segments, videoProvider, videoKey, videoModel) {
   try {
     db.prepare('UPDATE videos SET status = ? WHERE id = ?').run('generating', videoId);
     
-    const adapter = loadAdapter('video', videoProvider || process.env.VIDEO_PROVIDER, videoKey);
+    const adapter = loadAdapter('video', videoProvider || process.env.VIDEO_PROVIDER, videoKey, videoModel);
     if (!adapter) throw new Error('Video adapter not found');
     
     const videoPaths = [];
@@ -251,7 +251,6 @@ async function generateVideoAsync(videoId, prompt, segments, videoProvider, vide
       const segmentPrompt = `${prompt} (segment ${i + 1}/${segments})`;
       const segmentPath = await adapter.generate({
         prompt: segmentPrompt,
-        model: process.env.VIDEO_MODEL,
         duration: 10
       });
       videoPaths.push(segmentPath);

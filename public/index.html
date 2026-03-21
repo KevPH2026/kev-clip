@@ -64,23 +64,70 @@
             </div>
             <p class="text-gray-400 text-sm mb-4 i18n-step1-desc">Who tells your story?</p>
             
-            <!-- Provider Cards -->
+            <!-- Provider Cards with Model Selection -->
             <div class="grid grid-cols-2 gap-3 mb-4">
-              <button type="button" onclick="selectTextProvider('openai')" class="text-provider-btn p-3 rounded-xl border border-gray-600 hover:border-purple-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="openai">
-                <div class="font-semibold text-sm">OpenAI GPT-4</div>
-                <div class="text-xs text-gray-500">Best for creative scripts</div>
+              <button type="button" onclick="selectTextProvider('openai', 'gpt-4o')" class="text-provider-btn p-3 rounded-xl border border-gray-600 hover:border-purple-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="openai" data-model="gpt-4o">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-sm">GPT-4o</div>
+                  <span class="text-xs bg-purple-500/30 text-purple-300 px-2 py-0.5 rounded">Best</span>
+                </div>
+                <div class="text-xs text-gray-500">Most capable & creative</div>
               </button>
-              <button type="button" onclick="selectTextProvider('deepseek')" class="text-provider-btn p-3 rounded-xl border border-gray-600 hover:border-purple-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="deepseek">
-                <div class="font-semibold text-sm">DeepSeek</div>
-                <div class="text-xs text-gray-500">Great for Chinese content</div>
+              <button type="button" onclick="selectTextProvider('openai', 'gpt-4-turbo')" class="text-provider-btn p-3 rounded-xl border border-gray-600 hover:border-purple-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="openai" data-model="gpt-4-turbo">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-sm">GPT-4 Turbo</div>
+                  <span class="text-xs bg-blue-500/30 text-blue-300 px-2 py-0.5 rounded">Fast</span>
+                </div>
+                <div class="text-xs text-gray-500">Fast & reliable</div>
               </button>
-              <button type="button" onclick="selectTextProvider('anthropic')" class="text-provider-btn p-3 rounded-xl border border-gray-600 hover:border-purple-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="anthropic">
-                <div class="font-semibold text-sm">Claude</div>
+              <button type="button" onclick="selectTextProvider('openai', 'gpt-4o-mini')" class="text-provider-btn p-3 rounded-xl border border-gray-600 hover:border-purple-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="openai" data-model="gpt-4o-mini">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-sm">GPT-4o Mini</div>
+                  <span class="text-xs bg-green-500/30 text-green-300 px-2 py-0.5 rounded">Cheap</span>
+                </div>
+                <div class="text-xs text-gray-500">Fast & affordable</div>
+              </button>
+              <button type="button" onclick="selectTextProvider('deepseek', 'deepseek-chat')" class="text-provider-btn p-3 rounded-xl border border-gray-600 hover:border-purple-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="deepseek" data-model="deepseek-chat">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-sm">DeepSeek-V3</div>
+                  <span class="text-xs bg-orange-500/30 text-orange-300 px-2 py-0.5 rounded">CN</span>
+                </div>
+                <div class="text-xs text-gray-500">Great for Chinese</div>
+              </button>
+              <button type="button" onclick="selectTextProvider('deepseek', 'deepseek-reasoner')" class="text-provider-btn p-3 rounded-xl border border-gray-600 hover:border-purple-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="deepseek" data-model="deepseek-reasoner">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-sm">DeepSeek-R1</div>
+                  <span class="text-xs bg-red-500/30 text-red-300 px-2 py-0.5 rounded">Smart</span>
+                </div>
+                <div class="text-xs text-gray-500">Deep reasoning</div>
+              </button>
+              <button type="button" onclick="selectTextProvider('anthropic', 'claude-3-opus')" class="text-provider-btn p-3 rounded-xl border border-gray-600 hover:border-purple-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="anthropic" data-model="claude-3-opus">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-sm">Claude 3 Opus</div>
+                  <span class="text-xs bg-purple-500/30 text-purple-300 px-2 py-0.5 rounded">Pro</span>
+                </div>
                 <div class="text-xs text-gray-500">Detailed storytelling</div>
               </button>
-              <button type="button" onclick="selectTextProvider('google')" class="text-provider-btn p-3 rounded-xl border border-gray-600 hover:border-purple-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="google">
-                <div class="font-semibold text-sm">Gemini</div>
-                <div class="text-xs text-gray-500">Multimodal understanding</div>
+              <button type="button" onclick="selectTextProvider('anthropic', 'claude-3-sonnet')" class="text-provider-btn p-3 rounded-xl border border-gray-600 hover:border-purple-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="anthropic" data-model="claude-3-sonnet">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-sm">Claude 3 Sonnet</div>
+                  <span class="text-xs bg-blue-500/30 text-blue-300 px-2 py-0.5 rounded">Balanced</span>
+                </div>
+                <div class="text-xs text-gray-500">Balance quality/speed</div>
+              </button>
+              <button type="button" onclick="selectTextProvider('google', 'gemini-pro')" class="text-provider-btn p-3 rounded-xl border border-gray-600 hover:border-purple-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="google" data-model="gemini-pro">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-sm">Gemini Pro</div>
+                  <span class="text-xs bg-blue-500/30 text-blue-300 px-2 py-0.5 rounded">Google</span>
+                </div>
+                <div class="text-xs text-gray-500">Multimodal AI</div>
+              </button>
+              <button type="button" onclick="selectTextProvider('google', 'gemini-1.5-pro')" class="text-provider-btn p-3 rounded-xl border border-gray-600 hover:border-purple-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="google" data-model="gemini-1.5-pro">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-sm">Gemini 1.5 Pro</div>
+                  <span class="text-xs bg-indigo-500/30 text-indigo-300 px-2 py-0.5 rounded">New</span>
+                </div>
+                <div class="text-xs text-gray-500">Long context</div>
               </button>
             </div>
             
@@ -112,23 +159,63 @@
             </div>
             <p class="text-gray-400 text-sm mb-4 i18n-step2-desc">Who brings your script to life?</p>
             
-            <!-- Provider Cards -->
+            <!-- Provider Cards with Model Selection -->
             <div class="grid grid-cols-2 gap-3 mb-4">
-              <button type="button" onclick="selectVideoProvider('doubao')" class="video-provider-btn p-3 rounded-xl border border-gray-600 hover:border-pink-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="doubao">
-                <div class="font-semibold text-sm">豆包 Seedance</div>
+              <button type="button" onclick="selectVideoProvider('doubao', 'seedance-pro')" class="video-provider-btn p-3 rounded-xl border border-gray-600 hover:border-pink-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="doubao" data-model="seedance-pro">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-sm">Seedance Pro</div>
+                  <span class="text-xs bg-pink-500/30 text-pink-300 px-2 py-0.5 rounded">Best</span>
+                </div>
                 <div class="text-xs text-gray-500">Best quality & speed</div>
               </button>
-              <button type="button" onclick="selectVideoProvider('runway')" class="video-provider-btn p-3 rounded-xl border border-gray-600 hover:border-pink-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="runway">
-                <div class="font-semibold text-sm">Runway</div>
+              <button type="button" onclick="selectVideoProvider('doubao', 'seedance-lite')" class="video-provider-btn p-3 rounded-xl border border-gray-600 hover:border-pink-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="doubao" data-model="seedance-lite">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-sm">Seedance Lite</div>
+                  <span class="text-xs bg-green-500/30 text-green-300 px-2 py-0.5 rounded">Fast</span>
+                </div>
+                <div class="text-xs text-gray-500">Quick generation</div>
+              </button>
+              <button type="button" onclick="selectVideoProvider('runway', 'gen-3-alpha')" class="video-provider-btn p-3 rounded-xl border border-gray-600 hover:border-pink-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="runway" data-model="gen-3-alpha">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-sm">Runway Gen-3</div>
+                  <span class="text-xs bg-purple-500/30 text-purple-300 px-2 py-0.5 rounded">New</span>
+                </div>
                 <div class="text-xs text-gray-500">Industry standard</div>
               </button>
-              <button type="button" onclick="selectVideoProvider('pika')" class="video-provider-btn p-3 rounded-xl border border-gray-600 hover:border-pink-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="pika">
-                <div class="font-semibold text-sm">Pika</div>
+              <button type="button" onclick="selectVideoProvider('runway', 'gen-2')" class="video-provider-btn p-3 rounded-xl border border-gray-600 hover:border-pink-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="runway" data-model="gen-2">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-sm">Runway Gen-2</div>
+                  <span class="text-xs bg-blue-500/30 text-blue-300 px-2 py-0.5 rounded">Stable</span>
+                </div>
+                <div class="text-xs text-gray-500">Proven quality</div>
+              </button>
+              <button type="button" onclick="selectVideoProvider('pika', 'pika-1.5')" class="video-provider-btn p-3 rounded-xl border border-gray-600 hover:border-pink-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="pika" data-model="pika-1.5">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-sm">Pika 1.5</div>
+                  <span class="text-xs bg-orange-500/30 text-orange-300 px-2 py-0.5 rounded">FX</span>
+                </div>
                 <div class="text-xs text-gray-500">Creative effects</div>
               </button>
-              <button type="button" onclick="selectVideoProvider('kling')" class="video-provider-btn p-3 rounded-xl border border-gray-600 hover:border-pink-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="kling">
-                <div class="font-semibold text-sm">Kling</div>
+              <button type="button" onclick="selectVideoProvider('pika', 'pika-1.0')" class="video-provider-btn p-3 rounded-xl border border-gray-600 hover:border-pink-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="pika" data-model="pika-1.0">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-sm">Pika 1.0</div>
+                  <span class="text-xs bg-yellow-500/30 text-yellow-300 px-2 py-0.5 rounded">Classic</span>
+                </div>
+                <div class="text-xs text-gray-500">Reliable results</div>
+              </button>
+              <button type="button" onclick="selectVideoProvider('kling', 'kling-1.5')" class="video-provider-btn p-3 rounded-xl border border-gray-600 hover:border-pink-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="kling" data-model="kling-1.5">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-sm">Kling 1.5</div>
+                  <span class="text-xs bg-red-500/30 text-red-300 px-2 py-0.5 rounded">HD</span>
+                </div>
                 <div class="text-xs text-gray-500">High fidelity</div>
+              </button>
+              <button type="button" onclick="selectVideoProvider('kling', 'kling-1.0')" class="video-provider-btn p-3 rounded-xl border border-gray-600 hover:border-pink-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="kling" data-model="kling-1.0">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-sm">Kling 1.0</div>
+                  <span class="text-xs bg-gray-500/30 text-gray-300 px-2 py-0.5 rounded">Base</span>
+                </div>
+                <div class="text-xs text-gray-500">Standard quality</div>
               </button>
             </div>
             
@@ -455,9 +542,9 @@
     }
 
     // Select text provider
-    function selectTextProvider(provider) {
+    function selectTextProvider(provider, model) {
       document.querySelectorAll('.text-provider-btn').forEach(btn => {
-        if (btn.dataset.provider === provider) {
+        if (btn.dataset.provider === provider && btn.dataset.model === model) {
           btn.classList.add('border-purple-500', 'bg-purple-500/20');
           btn.classList.remove('border-gray-600', 'bg-gray-800/50');
         } else {
@@ -465,7 +552,7 @@
           btn.classList.add('border-gray-600', 'bg-gray-800/50');
         }
       });
-      // Store selected provider in a hidden input or variable
+      
       if (!document.getElementById('selectedTextProvider')) {
         const input = document.createElement('input');
         input.type = 'hidden';
@@ -473,12 +560,20 @@
         document.body.appendChild(input);
       }
       document.getElementById('selectedTextProvider').value = provider;
+      
+      if (!document.getElementById('selectedTextModel')) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.id = 'selectedTextModel';
+        document.body.appendChild(input);
+      }
+      document.getElementById('selectedTextModel').value = model;
     }
 
     // Select video provider
-    function selectVideoProvider(provider) {
+    function selectVideoProvider(provider, model) {
       document.querySelectorAll('.video-provider-btn').forEach(btn => {
-        if (btn.dataset.provider === provider) {
+        if (btn.dataset.provider === provider && btn.dataset.model === model) {
           btn.classList.add('border-pink-500', 'bg-pink-500/20');
           btn.classList.remove('border-gray-600', 'bg-gray-800/50');
         } else {
@@ -486,6 +581,7 @@
           btn.classList.add('border-gray-600', 'bg-gray-800/50');
         }
       });
+      
       if (!document.getElementById('selectedVideoProvider')) {
         const input = document.createElement('input');
         input.type = 'hidden';
@@ -493,6 +589,14 @@
         document.body.appendChild(input);
       }
       document.getElementById('selectedVideoProvider').value = provider;
+      
+      if (!document.getElementById('selectedVideoModel')) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.id = 'selectedVideoModel';
+        document.body.appendChild(input);
+      }
+      document.getElementById('selectedVideoModel').value = model;
     }
 
     // Load user config from localStorage
@@ -513,14 +617,18 @@
         modal.style.display = 'flex';
         modal.classList.remove('hidden');
         
-        // Set default providers
-        selectTextProvider('openai');
-        selectVideoProvider('doubao');
+        // Set defaults
+        selectTextProvider('openai', 'gpt-4o');
+        selectVideoProvider('doubao', 'seedance-pro');
         
         // Load saved values if any
         if (userConfig) {
-          if (userConfig.textProvider) selectTextProvider(userConfig.textProvider);
-          if (userConfig.videoProvider) selectVideoProvider(userConfig.videoProvider);
+          if (userConfig.textProvider && userConfig.textModel) {
+            selectTextProvider(userConfig.textProvider, userConfig.textModel);
+          }
+          if (userConfig.videoProvider && userConfig.videoModel) {
+            selectVideoProvider(userConfig.videoProvider, userConfig.videoModel);
+          }
           document.getElementById('configTextKey').value = userConfig.textKey || '';
           document.getElementById('configVideoKey').value = userConfig.videoKey || '';
         }
@@ -539,12 +647,16 @@
     // Save config
     function saveConfig() {
       const textProvider = document.getElementById('selectedTextProvider')?.value || 'openai';
+      const textModel = document.getElementById('selectedTextModel')?.value || 'gpt-4o';
       const videoProvider = document.getElementById('selectedVideoProvider')?.value || 'doubao';
+      const videoModel = document.getElementById('selectedVideoModel')?.value || 'seedance-pro';
       
       const config = {
         textProvider: textProvider,
+        textModel: textModel,
         textKey: document.getElementById('configTextKey').value,
         videoProvider: videoProvider,
+        videoModel: videoModel,
         videoKey: document.getElementById('configVideoKey').value
       };
       
@@ -619,7 +731,8 @@
           headers: { 
             'Content-Type': 'application/json',
             'X-Text-Provider': userConfig.textProvider,
-            'X-Text-Key': userConfig.textKey
+            'X-Text-Key': userConfig.textKey,
+            'X-Text-Model': userConfig.textModel
           },
           body: JSON.stringify({
             project_id: 1,
@@ -644,7 +757,8 @@
           headers: { 
             'Content-Type': 'application/json',
             'X-Video-Provider': userConfig.videoProvider,
-            'X-Video-Key': userConfig.videoKey
+            'X-Video-Key': userConfig.videoKey,
+            'X-Video-Model': userConfig.videoModel
           },
           body: JSON.stringify({
             project_id: 1,
