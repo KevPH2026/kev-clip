@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: kev-clip
+    runtime: node
+    repo: https://github.com/KevPH2026/kev-clip
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: TEXT_PROVIDER
+        sync: false
+      - key: TEXT_API_KEY
+        sync: false
+      - key: TEXT_MODEL
+        sync: false
+      - key: VIDEO_PROVIDER
+        sync: false
+      - key: VIDEO_API_KEY
+        sync: false
+      - key: VIDEO_MODEL
+        sync: false
+    healthCheckPath: /api/health
+    autoDeploy: true
