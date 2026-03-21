@@ -11,6 +11,13 @@ AI-powered video generation studio with complete workflow: story import → stor
 ### Landing Page
 ![Landing Page](./docs/assets/landing-page.jpg?v=2)
 
+## 🎬 Demo Videos
+
+See what Kev-Clip can generate:
+
+- [Episode 1: Code Awakening](./demo-videos/demo-episode-1.mp4) (29MB)
+- [Episode 3: City Chase](./demo-videos/demo-episode-3.mp4) (30MB)
+
 ## ✨ Features
 
 - 📚 **Story Import** - Upload novels chapter by chapter
