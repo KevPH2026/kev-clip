@@ -75,7 +75,7 @@
         </div>
         <div>
           <h1 class="text-xl font-bold">Kev-Clip</h1>
-          <p class="text-xs text-gray-400">AI Video Studio</p>
+          <p class="text-xs text-gray-400 i18n-subtitle">AI Video Studio</p>
         </div>
       </div>
       <div class="flex items-center space-x-4">
@@ -99,8 +99,8 @@
   <!-- Demo Banner -->
   <div id="demoBanner" class="hidden bg-yellow-600 text-white text-center py-2 px-4">
     <p class="text-sm">
-      🎬 <strong>Demo Mode</strong> — Please configure your API keys to generate videos
-      <button onclick="openConfig()" class="underline font-semibold ml-2">Configure Now →</button>
+      🎬 <strong class="i18n-demostrong">Demo Mode</strong> — <span class="i18n-demobanner">Please configure your API keys to generate videos</span>
+      <button onclick="openConfig()" class="underline font-semibold ml-2 i18n-configurenow">Configure Now →</button>
     </p>
   </div>
 
@@ -123,10 +123,10 @@
       <!-- Input Section -->
       <div class="glass rounded-2xl p-6 mb-8">
         <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-300 mb-2">Describe your scene</label>
+          <label class="block text-sm font-medium text-gray-300 mb-2 i18n-describe">Describe your scene</label>
           <textarea 
             id="promptInput" 
-            placeholder="Cyberpunk girl fighting robots in neon rain..."
+            placeholder="Describe your scene..."
             class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 resize-none"
             rows="3"
           ></textarea>
@@ -134,35 +134,35 @@
         
         <div class="flex flex-wrap gap-4 mb-4">
           <div class="flex-1 min-w-[150px]">
-            <label class="block text-sm text-gray-400 mb-1">Language / 语言</label>
+            <label class="block text-sm text-gray-400 mb-1"><span class="i18n-language">Language</span></label>
             <select id="languageSelect" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
               <option value="en">English</option>
               <option value="zh">中文</option>
             </select>
           </div>
           <div class="flex-1 min-w-[150px]">
-            <label class="block text-sm text-gray-400 mb-1">Script Style / 剧本风格</label>
+            <label class="block text-sm text-gray-400 mb-1"><span class="i18n-scriptstyle">Script Style</span></label>
             <select id="scriptStyleSelect" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
-              <option value="short-drama">Short Drama / 短剧</option>
-              <option value="anime">Anime / 动漫</option>
-              <option value="movie">Movie / 电影感</option>
-              <option value="comedy">Comedy / 喜剧</option>
-              <option value="horror">Horror / 恐怖</option>
+              <option value="short-drama" data-en="Short Drama" data-zh="短剧">Short Drama</option>
+              <option value="anime" data-en="Anime" data-zh="动漫">Anime</option>
+              <option value="movie" data-en="Movie" data-zh="电影感">Movie</option>
+              <option value="comedy" data-en="Comedy" data-zh="喜剧">Comedy</option>
+              <option value="horror" data-en="Horror" data-zh="恐怖">Horror</option>
             </select>
           </div>
           <div class="flex-1 min-w-[150px]">
-            <label class="block text-sm text-gray-400 mb-1">Visual Style / 视觉风格</label>
+            <label class="block text-sm text-gray-400 mb-1"><span class="i18n-visualstyle">Visual Style</span></label>
             <select id="styleSelect" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
-              <option value="cyberpunk">🌃 Cyberpunk / 赛博朋克</option>
-              <option value="anime">🎌 Anime / 二次元</option>
-              <option value="cinematic">🎬 Cinematic / 电影感</option>
-              <option value="fantasy">🐉 Fantasy / 奇幻</option>
-              <option value="scifi">🚀 Sci-Fi / 科幻</option>
-              <option value="realistic">📷 Realistic / 写实</option>
+              <option value="cyberpunk">🌃 Cyberpunk</option>
+              <option value="anime">🎌 Anime</option>
+              <option value="cinematic">🎬 Cinematic</option>
+              <option value="fantasy">🐉 Fantasy</option>
+              <option value="scifi">🚀 Sci-Fi</option>
+              <option value="realistic">📷 Realistic</option>
             </select>
           </div>
           <div class="flex-1 min-w-[150px]">
-            <label class="block text-sm text-gray-400 mb-1">Duration / 时长</label>
+            <label class="block text-sm text-gray-400 mb-1"><span class="i18n-duration">Duration</span></label>
             <select id="durationSelect" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
               <option value="10">10s</option>
               <option value="30">30s (3 clips)</option>
@@ -180,7 +180,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
-          <span id="generateBtnText">Generate Video</span>
+          <span id="generateBtnText" class="i18n-generate">Generate Video</span>
         </button>
       </div>
 
@@ -202,7 +202,7 @@
           <svg class="w-5 h-5 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/>
           </svg>
-          My Videos
+          <span class="i18n-myvideos">My Videos</span>
         </h3>
         
         <div id="videosGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -216,6 +216,102 @@
     const API_BASE = '';
     let ws = null;
     let userConfig = null;
+    let currentLang = localStorage.getItem('kev-clip-lang') || 'en';
+
+    // i18n translations
+    const i18n = {
+      en: {
+        config: 'Config',
+        subtitle: 'AI Video Studio',
+        describeScene: 'Describe your scene',
+        generate: 'Generate Video',
+        configureFirst: 'Configure API Keys First',
+        myVideos: 'My Videos',
+        demoBanner: 'Please configure your API keys to generate videos',
+        demoStrong: 'Demo Mode',
+        configureNow: 'Configure Now →',
+        language: 'Language',
+        scriptStyle: 'Script Style',
+        visualStyle: 'Visual Style',
+        duration: 'Duration',
+        configTitle: 'Configure Your API Keys',
+        textProvider: 'Text Model Provider',
+        textKey: 'Text API Key',
+        videoProvider: 'Video Model Provider',
+        videoKey: 'Video API Key',
+        cancel: 'Cancel',
+        save: 'Save & Start',
+        noVideos: 'No videos yet. Create your first one above!'
+      },
+      zh: {
+        config: '配置',
+        subtitle: 'AI 视频工作室',
+        describeScene: '描述你的场景',
+        generate: '生成视频',
+        configureFirst: '请先配置 API 密钥',
+        myVideos: '我的视频',
+        demoBanner: '请配置 API 密钥以生成视频',
+        demoStrong: '演示模式',
+        configureNow: '立即配置 →',
+        language: '语言',
+        scriptStyle: '剧本风格',
+        visualStyle: '视觉风格',
+        duration: '时长',
+        configTitle: '配置您的 API 密钥',
+        textProvider: '文本模型提供商',
+        textKey: '文本 API 密钥',
+        videoProvider: '视频模型提供商',
+        videoKey: '视频 API 密钥',
+        cancel: '取消',
+        save: '保存并启动',
+        noVideos: '还没有视频。在上方创建您的第一个视频！'
+      }
+    };
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('kev-clip-lang', lang);
+      updateLanguage();
+    }
+
+    function updateLanguage() {
+      const t = i18n[currentLang];
+      
+      // Update tab styles
+      const enBtn = document.getElementById('lang-en');
+      const zhBtn = document.getElementById('lang-zh');
+      if (enBtn && zhBtn) {
+        if (currentLang === 'en') {
+          enBtn.className = 'px-3 py-1 text-sm rounded-md bg-purple-600 text-white font-medium transition';
+          zhBtn.className = 'px-3 py-1 text-sm rounded-md text-gray-400 hover:text-white transition';
+        } else {
+          enBtn.className = 'px-3 py-1 text-sm rounded-md text-gray-400 hover:text-white transition';
+          zhBtn.className = 'px-3 py-1 text-sm rounded-md bg-purple-600 text-white font-medium transition';
+        }
+      }
+      
+      // Update texts
+      document.querySelectorAll('.i18n-config').forEach(el => el.textContent = t.config);
+      document.querySelectorAll('.i18n-subtitle').forEach(el => el.textContent = t.subtitle);
+      document.querySelectorAll('.i18n-describe').forEach(el => el.textContent = t.describeScene);
+      document.querySelectorAll('.i18n-generate').forEach(el => el.textContent = t.generate);
+      document.querySelectorAll('.i18n-myvideos').forEach(el => el.textContent = t.myVideos);
+      document.querySelectorAll('.i18n-demobanner').forEach(el => el.textContent = t.demoBanner);
+      document.querySelectorAll('.i18n-demostrong').forEach(el => el.textContent = t.demoStrong);
+      document.querySelectorAll('.i18n-configurenow').forEach(el => el.textContent = t.configureNow);
+      document.querySelectorAll('.i18n-configtitle').forEach(el => el.textContent = t.configTitle);
+      document.querySelectorAll('.i18n-language').forEach(el => el.textContent = t.language);
+      document.querySelectorAll('.i18n-scriptstyle').forEach(el => el.textContent = t.scriptStyle);
+      document.querySelectorAll('.i18n-visualstyle').forEach(el => el.textContent = t.visualStyle);
+      document.querySelectorAll('.i18n-duration').forEach(el => el.textContent = t.duration);
+      
+      // Update input placeholder
+      const promptInput = document.getElementById('promptInput');
+      if (promptInput) promptInput.placeholder = t.describeScene;
+      
+      // Update generate button
+      updateUI();
+    }
 
     // Load user config from localStorage
     function loadUserConfig() {
@@ -254,7 +350,7 @@
       };
       
       if (!config.textKey || !config.videoKey) {
-        alert('Please enter both API keys');
+        alert(currentLang === 'zh' ? '请输入 API 密钥' : 'Please enter API keys');
         return;
       }
       
@@ -262,22 +358,23 @@
       userConfig = config;
       closeConfig();
       updateUI();
-      alert('✅ API Keys saved! You can now generate videos.');
+      alert(currentLang === 'zh' ? '✅ API 密钥已保存！您现在可以生成视频了。' : '✅ API Keys saved! You can now generate videos.');
     }
 
     // Update UI based on config status
     function updateUI() {
+      const t = i18n[currentLang];
       const hasConfig = !!userConfig;
       const btn = document.getElementById('generateBtn');
       const btnText = document.getElementById('generateBtnText');
       const banner = document.getElementById('demoBanner');
       
       if (hasConfig) {
-        btnText.textContent = 'Generate Video';
+        btnText.textContent = t.generate;
         btn.classList.remove('opacity-50');
         banner.classList.add('hidden');
       } else {
-        btnText.textContent = 'Configure API Keys First';
+        btnText.textContent = t.configureFirst;
         btn.classList.add('opacity-50');
         banner.classList.remove('hidden');
       }
@@ -286,6 +383,7 @@
     async function loadConfig() {
       // Check if user has local config
       const hasUserConfig = loadUserConfig();
+      updateLanguage();
       updateUI();
     }
 
