@@ -19,9 +19,17 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.static(PUBLIC_DIR));
 
-// Fallback for SPA
+// Routes for HTML pages
 app.get('/', (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
+});
+
+app.get('/admin.html', (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, 'admin.html'));
+});
+
+app.get('/landing.html', (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, 'landing.html'));
 });
 
 // Database
