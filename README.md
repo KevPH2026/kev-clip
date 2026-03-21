@@ -13,7 +13,7 @@ AI-powered video generation studio with complete workflow: story import → stor
 
 ## 🔄 Workflow
 
-![Workflow - Chinese](./docs/assets/workflow-zh.jpg)
+![Workflow - English](./docs/assets/workflow-en.jpg)
 
 ## 🎬 Demo Videos
 
