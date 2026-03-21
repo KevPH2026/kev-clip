@@ -2,6 +2,7 @@ services:
   - type: web
     name: kev-clip
     runtime: node
+    nodeVersion: 20
     repo: https://github.com/KevPH2026/kev-clip
     buildCommand: npm install
     startCommand: npm start
