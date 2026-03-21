@@ -4,7 +4,7 @@
 
 AI-powered video generation studio with complete workflow: story import → storyboard → script → video.
 
-[🚀 Live Demo](https://superk.ai) · [📖 Docs](./docs) · [🐛 Issues](https://github.com/KevPH2026/kev-clip/issues)
+[🚀 Live Demo](https://k-clip.superk.ai) · [📖 Docs](./docs) · [🐛 Issues](https://github.com/KevPH2026/kev-clip/issues)
 
 ## ✨ Features
 

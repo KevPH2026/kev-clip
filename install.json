@@ -14,7 +14,7 @@
   },
   "ports": [3000],
   "urls": {
-    "landing": "http://localhost:3000",
-    "admin": "http://localhost:3000/admin.html"
+    "landing": "https://k-clip.superk.ai",
+    "admin": "https://k-clip.superk.ai/admin.html"
   }
 }
