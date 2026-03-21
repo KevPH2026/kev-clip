@@ -11,6 +11,10 @@ AI-powered video generation studio with complete workflow: story import → stor
 ### Landing Page
 ![Landing Page](./docs/assets/landing-page.jpg?v=2)
 
+## 🔄 Workflow
+
+![Workflow - Chinese](./docs/assets/workflow-zh.jpg)
+
 ## 🎬 Demo Videos
 
 See what Kev-Clip can generate:
