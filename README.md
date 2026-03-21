@@ -198,8 +198,6 @@ Built with:
 - [Better-SQLite3](https://github.com/WiseLibs/better-sqlite3)
 - [Tailwind CSS](https://tailwindcss.com)
 
-Inspired by [ToonFlow](https://github.com/HBAI-Ltd/Toonflow-app) — we simplified the architecture and improved the UX.
-
 ## 📮 Contact
 
 - Issues: [github.com/KevPH2026/kev-clip/issues](https://github.com/KevPH2026/kev-clip/issues)
