@@ -128,14 +128,13 @@ app.post('/api/projects', (req, res) => {
 app.post('/api/scripts/generate', async (req, res) => {
   const { project_id, prompt, title, language, scriptStyle } = req.body;
   
+  // Check if demo mode
+  const isDemo = req.headers['x-demo-mode'] === 'true';
+  
   // Get user's API keys from headers
   const textProvider = req.headers['x-text-provider'] || process.env.TEXT_PROVIDER;
-  const textKey = req.headers['x-text-key'] || process.env.TEXT_API_KEY;
+  const textKey = req.headers['x-text-key'];
   const textModel = req.headers['x-text-model'];
-  
-  if (!textKey) {
-    return res.status(400).json({ error: 'Text API key required' });
-  }
   
   // Save initial record
   const result = db.prepare(
@@ -144,11 +143,85 @@ app.post('/api/scripts/generate', async (req, res) => {
   
   const scriptId = result.lastInsertRowid;
   
-  // Start async generation with user's config and preferences
-  generateScriptAsync(scriptId, prompt, textProvider, textKey, textModel, language || 'en', scriptStyle || 'short-drama');
+  if (isDemo || !textKey) {
+    // Demo mode: generate mock script
+    generateMockScriptAsync(scriptId, prompt, language || 'en', scriptStyle || 'short-drama');
+  } else {
+    // Real generation with user's config
+    generateScriptAsync(scriptId, prompt, textProvider, textKey, textModel, language || 'en', scriptStyle || 'short-drama');
+  }
   
   res.json({ id: scriptId, status: 'generating' });
 });
+
+// Generate mock script for demo mode
+async function generateMockScriptAsync(scriptId, prompt, language, scriptStyle) {
+  try {
+    // Simulate processing delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    let mockContent = '';
+    
+    if (language === 'zh') {
+      mockContent = `【演示模式】自动生成的示例剧本
+
+※ 场景 1 - 夜晚
+$ 主角、配角
+【BGM】紧张悬疑
+△ 镜头从远处慢慢推近，城市霓虹灯闪烁
+主角：（凝视远方）这就是我们的战场...
+
+※ 场景 2 - 室内
+$ 主角
+【BGM】舒缓
+△ 特写镜头，主角表情凝重
+主角：（独白）无论前方有什么，我都不会退缩。
+
+※ 场景 3 - 高潮
+$ 主角、反派
+【BGM】激烈战斗
+△ 快速剪辑，动作场面
+主角：（大喊）为了正义！
+
+---
+这是演示模式生成的示例剧本。
+真实模式将使用您选择的 AI 模型生成创意内容。`;
+    } else {
+      mockContent = `[DEMO MODE] Auto-generated sample script
+
+※ Scene 1 - Night
+$ Protagonist, Sidekick
+【BGM】Tense Suspense
+△ Camera slowly pushes in from distance, city neon lights flickering
+Protagonist: (gazing into distance) This is our battlefield...
+
+※ Scene 2 - Interior
+$ Protagonist
+【BGM】Melancholic
+△ Close-up shot, protagonist\'s solemn expression
+Protagonist: (monologue) No matter what lies ahead, I won\'t back down.
+
+※ Scene 3 - Climax
+$ Protagonist, Villain
+【BGM】Intense Battle
+△ Quick cuts, action sequence
+Protagonist: (shouting) For justice!
+
+---
+This is a sample script generated in demo mode.
+Real mode will use your selected AI model to create creative content.`;
+    }
+    
+    db.prepare(
+      'UPDATE scripts SET content = ?, status = ?, completed_at = CURRENT_TIMESTAMP WHERE id = ?'
+    ).run(mockContent, 'completed', scriptId);
+    
+  } catch (error) {
+    db.prepare(
+      'UPDATE scripts SET status = ?, error_msg = ? WHERE id = ?'
+    ).run('failed', error.message, scriptId);
+  }
+}
 
 async function generateScriptAsync(scriptId, prompt, textProvider, textKey, textModel, language, scriptStyle) {
   try {
@@ -216,14 +289,13 @@ app.post('/api/videos/generate', async (req, res) => {
   const { project_id, script_id, prompt, duration = 10 } = req.body;
   const segments = Math.ceil(duration / 10);
   
+  // Check if demo mode
+  const isDemo = req.headers['x-demo-mode'] === 'true';
+  
   // Get user's API keys from headers
   const videoProvider = req.headers['x-video-provider'] || process.env.VIDEO_PROVIDER;
-  const videoKey = req.headers['x-video-key'] || process.env.VIDEO_API_KEY;
+  const videoKey = req.headers['x-video-key'];
   const videoModel = req.headers['x-video-model'];
-  
-  if (!videoKey) {
-    return res.status(400).json({ error: 'Video API key required' });
-  }
   
   const result = db.prepare(
     'INSERT INTO videos (project_id, script_id, prompt, duration, segments, status) VALUES (?, ?, ?, ?, ?, ?)'
@@ -231,11 +303,38 @@ app.post('/api/videos/generate', async (req, res) => {
   
   const videoId = result.lastInsertRowid;
   
-  // Start async generation with user's config
-  generateVideoAsync(videoId, prompt, segments, videoProvider, videoKey, videoModel);
+  if (isDemo || !videoKey) {
+    // Demo mode: generate mock video
+    generateMockVideoAsync(videoId, prompt, segments);
+  } else {
+    // Real generation with user's config
+    generateVideoAsync(videoId, prompt, segments, videoProvider, videoKey, videoModel);
+  }
   
   res.json({ id: videoId, status: 'pending', segments });
 });
+
+// Generate mock video for demo mode
+async function generateMockVideoAsync(videoId, prompt, segments) {
+  try {
+    db.prepare('UPDATE videos SET status = ? WHERE id = ?').run('generating', videoId);
+    
+    // Simulate processing delay (5-10 seconds)
+    await new Promise(resolve => setTimeout(resolve, 5000 + Math.random() * 5000));
+    
+    // Use a sample video URL for demo
+    const demoVideoUrl = 'https://videos.pexels.com/video-files/856973/856973-hd_1920_1080_30fps.mp4';
+    
+    db.prepare(
+      'UPDATE videos SET file_path = ?, status = ?, completed_at = CURRENT_TIMESTAMP WHERE id = ?'
+    ).run(demoVideoUrl, 'completed', videoId);
+    
+  } catch (error) {
+    db.prepare(
+      'UPDATE videos SET status = ?, error_msg = ? WHERE id = ?'
+    ).run('failed', error.message, videoId);
+  }
+}
 
 async function generateVideoAsync(videoId, prompt, segments, videoProvider, videoKey, videoModel) {
   try {

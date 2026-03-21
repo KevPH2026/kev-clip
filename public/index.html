@@ -132,6 +132,76 @@
     </div>
   </section>
 
+  <!-- Creator Studio Section -->
+  <section id="studio" class="py-20 bg-gray-800/50">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold mb-4">Create Your Video</h2>
+        <p class="text-gray-400">Describe your scene and let AI do the magic</p>
+      </div>
+      
+      <div class="glass rounded-2xl p-8">
+        <!-- Input Area -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-300 mb-2">Describe your scene</label>
+          <textarea 
+            id="promptInput" 
+            placeholder="A cyberpunk girl walking through neon-lit Tokyo streets at night, rain falling, reflections on wet pavement..."
+            class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 resize-none"
+            rows="4"
+          ></textarea>
+        </div>
+        
+        <!-- Options -->
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div>
+            <label class="block text-sm text-gray-400 mb-1">Language</label>
+            <select id="languageSelect" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-white">
+              <option value="en">English</option>
+              <option value="zh">中文</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-400 mb-1">Script Style</label>
+            <select id="scriptStyleSelect" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-white">
+              <option value="short-drama">Short Drama</option>
+              <option value="anime">Anime</option>
+              <option value="movie">Movie</option>
+              <option value="comedy">Comedy</option>
+              <option value="horror">Horror</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Generate Button -->
+        <button 
+          id="generateBtn"
+          onclick="generateVideo()" 
+          class="w-full gradient-bg py-4 rounded-xl font-bold text-lg hover:opacity-90 transition flex items-center justify-center"
+        >
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          Generate Video
+        </button>
+        
+        <!-- Demo Mode Notice -->
+        <p id="demoNotice" class="text-center text-sm text-gray-500 mt-4 hidden">
+          🎬 Demo Mode: Using simulated AI generation
+        </p>
+      </div>
+      
+      <!-- Results Section -->
+      <div id="resultsSection" class="mt-8 hidden">
+        <h3 class="text-xl font-bold mb-4">Your Videos</h3>
+        <div id="videosGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Videos will be loaded here -->
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Demo Section -->
   <section id="demo" class="py-20 bg-gray-900">
     <div class="max-w-6xl mx-auto px-4">
@@ -506,6 +576,9 @@
   </div>
 
   <script>
+    // API Base URL
+    const API_BASE = '';
+    
     // i18n translations
     const i18n = {
       en: {
@@ -712,6 +785,168 @@
     // Check if in demo mode
     function isDemoMode() {
       return userConfig && userConfig.demoMode === true;
+    }
+
+    // Generate video
+    async function generateVideo() {
+      const t = i18n[currentLang];
+      const promptInput = document.getElementById('promptInput');
+      const prompt = promptInput ? promptInput.value : '';
+      
+      if (!prompt) {
+        alert(t.describeScene || 'Please describe your scene');
+        return;
+      }
+      
+      // Show demo notice if in demo mode
+      const demoNotice = document.getElementById('demoNotice');
+      if (demoNotice) {
+        demoNotice.classList.toggle('hidden', !isDemoMode());
+      }
+      
+      // Show loading state
+      const btn = document.getElementById('generateBtn');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="animate-spin mr-2">⚡</span> ' + (currentLang === 'zh' ? '生成中...' : 'Generating...');
+      }
+      
+      try {
+        const isDemo = isDemoMode();
+        const headers = {
+          'Content-Type': 'application/json'
+        };
+        
+        if (isDemo) {
+          headers['X-Demo-Mode'] = 'true';
+        } else if (userConfig) {
+          headers['X-Text-Provider'] = userConfig.textProvider;
+          headers['X-Text-Key'] = userConfig.textKey;
+          headers['X-Video-Provider'] = userConfig.videoProvider;
+          headers['X-Video-Key'] = userConfig.videoKey;
+        }
+        
+        // Step 1: Generate script
+        console.log('Generating script...', isDemo ? '(Demo Mode)' : '');
+        const scriptRes = await fetch(`${API_BASE}/api/scripts/generate`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            project_id: 1,
+            prompt: prompt,
+            title: prompt.slice(0, 50),
+            language: document.getElementById('languageSelect')?.value || currentLang,
+            scriptStyle: document.getElementById('scriptStyleSelect')?.value || 'short-drama'
+          })
+        });
+        
+        if (!scriptRes.ok) {
+          throw new Error('Failed to generate script');
+        }
+        
+        const script = await scriptRes.json();
+        console.log('Script generated:', script);
+        
+        // Step 2: Generate video
+        console.log('Generating video...', isDemo ? '(Demo Mode)' : '');
+        const videoRes = await fetch(`${API_BASE}/api/videos/generate`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            project_id: 1,
+            script_id: script.id,
+            prompt: prompt,
+            duration: 10
+          })
+        });
+        
+        if (!videoRes.ok) {
+          throw new Error('Failed to generate video');
+        }
+        
+        const video = await videoRes.json();
+        console.log('Video generation started:', video);
+        
+        // Show results section
+        const resultsSection = document.getElementById('resultsSection');
+        if (resultsSection) {
+          resultsSection.classList.remove('hidden');
+        }
+        
+        // Poll for video completion
+        pollVideoStatus(video.id);
+        
+      } catch (error) {
+        console.error('Generation failed:', error);
+        alert('❌ ' + error.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Generate Video
+          `;
+        }
+      }
+    }
+
+    // Poll video status
+    async function pollVideoStatus(videoId) {
+      try {
+        const res = await fetch(`${API_BASE}/api/videos/1`);
+        const videos = await res.json();
+        const video = videos.find(v => v.id === videoId);
+        
+        if (!video) return;
+        
+        if (video.status === 'completed') {
+          // Add video to grid
+          const grid = document.getElementById('videosGrid');
+          if (grid) {
+            const videoCard = document.createElement('div');
+            videoCard.className = 'glass rounded-xl overflow-hidden';
+            videoCard.innerHTML = `
+              <div class="aspect-video">
+                <video src="${video.file_path}" controls class="w-full h-full object-cover"></video>
+              </div>
+              <div class="p-4">
+                <p class="text-sm text-gray-300 line-clamp-2">${video.prompt || 'Generated Video'}</p>
+                <div class="flex justify-between items-center mt-2">
+                  <span class="text-xs text-gray-500">${video.duration}s · ${new Date(video.created_at).toLocaleDateString()}</span>
+                  <span class="px-2 py-1 rounded text-xs bg-green-900 text-green-300">Completed</span>
+                </div>
+              </div>
+            `;
+            grid.prepend(videoCard);
+          }
+          
+          alert(currentLang === 'zh' 
+            ? (isDemoMode() ? '✅ 演示视频生成完成！（这是模拟视频）' : '✅ 视频生成完成！')
+            : (isDemoMode() ? '✅ Demo video completed! (This is a simulated video)' : '✅ Video generation completed!')
+          );
+        } else if (video.status === 'failed') {
+          alert('❌ ' + (video.error_msg || 'Generation failed'));
+        } else {
+          setTimeout(() => pollVideoStatus(videoId), 2000);
+        }
+      } catch (e) {
+        setTimeout(() => pollVideoStatus(videoId), 2000);
+      }
+    }
+
+    // Load videos
+    async function loadVideos() {
+      try {
+        const res = await fetch(`${API_BASE}/api/videos/1`);
+        const videos = await res.json();
+        console.log('Videos:', videos);
+        // Update UI with videos
+      } catch (e) {
+        console.error('Failed to load videos');
+      }
     }
 
     // Initialize
