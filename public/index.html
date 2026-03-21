@@ -41,6 +41,14 @@
     </div>
   </nav>
 
+  <!-- Demo Banner -->
+  <div id="demoBanner" class="hidden bg-yellow-600 text-white text-center py-2 px-4">
+    <p class="text-sm">
+      🎬 <strong>Demo Mode</strong> — This is a preview. To generate videos with your own API keys, 
+      <a href="https://github.com/KevPH2026/kev-clip" class="underline font-semibold" target="_blank">deploy your own instance →</a>
+    </p>
+  </div>
+
   <!-- Main Content -->
   <div class="pt-24 pb-12 px-4">
     <div class="max-w-4xl mx-auto">
@@ -134,18 +142,30 @@
   <script>
     const API_BASE = '';
     let ws = null;
+    let isDemoMode = false;
 
     async function loadConfig() {
       try {
         const res = await fetch(`${API_BASE}/api/config`);
         const config = await res.json();
         console.log('Config:', config);
+        
+        // Check if demo mode
+        if (config.demoMode) {
+          isDemoMode = true;
+          document.getElementById('demoBanner').classList.remove('hidden');
+        }
       } catch (e) {
         console.error('Failed to load config');
       }
     }
 
     async function generate() {
+      if (isDemoMode) {
+        alert('🎬 Demo Mode\n\nThis is a preview of Kev-Clip.\n\nTo generate actual videos, please:\n1. Deploy your own instance on Render\n2. Or run locally with your API keys\n\nGitHub: github.com/KevPH2026/kev-clip');
+        return;
+      }
+      
       const prompt = document.getElementById('promptInput').value;
       const style = document.getElementById('styleSelect').value;
       const duration = document.getElementById('durationSelect').value;

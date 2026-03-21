@@ -85,7 +85,9 @@ app.get('/api/health', (req, res) => {
 
 // Get config
 app.get('/api/config', (req, res) => {
+  const hasKeys = process.env.TEXT_API_KEY && process.env.VIDEO_API_KEY;
   res.json({
+    demoMode: !hasKeys,
     text: {
       provider: process.env.TEXT_PROVIDER,
       model: process.env.TEXT_MODEL
