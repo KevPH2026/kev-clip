@@ -4,7 +4,7 @@
 
 AI-powered video generation for everyone. Build your own AI video studio in 3 minutes.
 
-[🎮 Live Demo](https://demo.kev-clip.com) · [📖 Documentation](https://docs.kev-clip.com) · [🐛 Issues](https://github.com/KevPH2026/kev-clip/issues)
+[🎮 Live Demo](https://k-clip.superk.ai) · [📖 Documentation](https://docs.kev-clip.com) · [🐛 Issues](https://github.com/KevPH2026/kev-clip/issues)
 
 ![Demo](https://raw.githubusercontent.com/KevPH2026/kev-clip/main/docs/assets/demo.gif)
 
