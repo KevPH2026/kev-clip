@@ -66,9 +66,15 @@ function initDB() {
 }
 
 // Load adapter
-function loadAdapter(type, provider) {
+function loadAdapter(type, provider, customKey) {
   try {
-    return require(`./adapters/${type}/${provider}`);
+    const AdapterClass = require(`./adapters/${type}/${provider}`);
+    if (customKey) {
+      return new AdapterClass({ apiKey: customKey });
+    }
+    // Fallback to env
+    const envKey = type === 'text' ? process.env.TEXT_API_KEY : process.env.VIDEO_API_KEY;
+    return new AdapterClass({ apiKey: envKey });
   } catch (e) {
     console.error(`Adapter not found: ${type}/${provider}`);
     return null;
@@ -123,6 +129,14 @@ app.post('/api/projects', (req, res) => {
 app.post('/api/scripts/generate', async (req, res) => {
   const { project_id, prompt, title } = req.body;
   
+  // Get user's API keys from headers
+  const textProvider = req.headers['x-text-provider'] || process.env.TEXT_PROVIDER;
+  const textKey = req.headers['x-text-key'] || process.env.TEXT_API_KEY;
+  
+  if (!textKey) {
+    return res.status(400).json({ error: 'Text API key required' });
+  }
+  
   // Save initial record
   const result = db.prepare(
     'INSERT INTO scripts (project_id, title, content, prompt, status) VALUES (?, ?, ?, ?, ?)'
@@ -130,21 +144,20 @@ app.post('/api/scripts/generate', async (req, res) => {
   
   const scriptId = result.lastInsertRowid;
   
-  // Start async generation
-  generateScriptAsync(scriptId, prompt);
+  // Start async generation with user's config
+  generateScriptAsync(scriptId, prompt, textProvider, textKey);
   
   res.json({ id: scriptId, status: 'generating' });
 });
 
-async function generateScriptAsync(scriptId, prompt) {
+async function generateScriptAsync(scriptId, prompt, textProvider, textKey) {
   try {
-    const adapter = loadAdapter('text', process.env.TEXT_PROVIDER);
+    const adapter = loadAdapter('text', textProvider || process.env.TEXT_PROVIDER, textKey);
     if (!adapter) throw new Error('Text adapter not found');
     
     const script = await adapter.generate({
       prompt,
       model: process.env.TEXT_MODEL,
-      apiKey: process.env.TEXT_API_KEY
     });
     
     db.prepare(
@@ -177,23 +190,31 @@ app.post('/api/videos/generate', async (req, res) => {
   const { project_id, script_id, prompt, duration = 10 } = req.body;
   const segments = Math.ceil(duration / 10);
   
+  // Get user's API keys from headers
+  const videoProvider = req.headers['x-video-provider'] || process.env.VIDEO_PROVIDER;
+  const videoKey = req.headers['x-video-key'] || process.env.VIDEO_API_KEY;
+  
+  if (!videoKey) {
+    return res.status(400).json({ error: 'Video API key required' });
+  }
+  
   const result = db.prepare(
     'INSERT INTO videos (project_id, script_id, prompt, duration, segments, status) VALUES (?, ?, ?, ?, ?, ?)'
   ).run(project_id, script_id, prompt, duration, segments, 'pending');
   
   const videoId = result.lastInsertRowid;
   
-  // Start async generation
-  generateVideoAsync(videoId, prompt, segments);
+  // Start async generation with user's config
+  generateVideoAsync(videoId, prompt, segments, videoProvider, videoKey);
   
   res.json({ id: videoId, status: 'pending', segments });
 });
 
-async function generateVideoAsync(videoId, prompt, segments) {
+async function generateVideoAsync(videoId, prompt, segments, videoProvider, videoKey) {
   try {
     db.prepare('UPDATE videos SET status = ? WHERE id = ?').run('generating', videoId);
     
-    const adapter = loadAdapter('video', process.env.VIDEO_PROVIDER);
+    const adapter = loadAdapter('video', videoProvider || process.env.VIDEO_PROVIDER, videoKey);
     if (!adapter) throw new Error('Video adapter not found');
     
     const videoPaths = [];
@@ -204,7 +225,6 @@ async function generateVideoAsync(videoId, prompt, segments) {
       const segmentPath = await adapter.generate({
         prompt: segmentPrompt,
         model: process.env.VIDEO_MODEL,
-        apiKey: process.env.VIDEO_API_KEY,
         duration: 10
       });
       videoPaths.push(segmentPath);

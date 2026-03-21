@@ -21,6 +21,51 @@
   </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
+  <!-- Config Modal -->
+  <div id="configModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-gray-800 rounded-2xl p-8 max-w-md w-full border border-gray-700">
+      <h3 class="text-xl font-bold mb-4 flex items-center">
+        <svg class="w-6 h-6 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        Configure Your API Keys
+      </h3>
+      
+      <div class="space-y-4 mb-6">
+        <div>
+          <label class="block text-sm text-gray-400 mb-1">Text Model Provider</label>
+          <select id="configTextProvider" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm">
+            <option value="openai">OpenAI (GPT-4)</option>
+            <option value="deepseek">DeepSeek</option>
+            <option value="anthropic">Claude</option>
+            <option value="google">Gemini</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-400 mb-1">Text API Key</label>
+          <input type="password" id="configTextKey" placeholder="sk-..." class="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm">
+        </div>
+        
+        <div class="border-t border-gray-700 pt-4">
+          <label class="block text-sm text-gray-400 mb-1">Video Model Provider</label>
+          <select id="configVideoProvider" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm">
+            <option value="doubao">Doubao (Seedance)</option>
+            <option value="runway">Runway</option>
+            <option value="pika">Pika</option>
+            <option value="kling">Kling</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-400 mb-1">Video API Key</label>
+          <input type="password" id="configVideoKey" placeholder="Your video API key" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm">
+        </div>
+      </div>
+      
+      <div class="flex justify-end space-x-3">
+        <button onclick="closeConfig()" class="px-4 py-2 text-gray-400 hover:text-white text-sm">Cancel</button>
+        <button onclick="saveConfig()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg text-sm font-medium">Save & Start</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Header -->
   <nav class="glass fixed top-0 left-0 right-0 z-50">
     <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
@@ -34,6 +79,10 @@
         </div>
       </div>
       <div class="flex items-center space-x-4">
+        <button onclick="openConfig()" class="text-gray-400 hover:text-white transition flex items-center space-x-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <span class="text-sm">Config</span>
+        </button>
         <a href="https://github.com/KevPH2026/kev-clip" target="_blank" class="text-gray-400 hover:text-white transition">
           <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
         </a>
@@ -44,8 +93,8 @@
   <!-- Demo Banner -->
   <div id="demoBanner" class="hidden bg-yellow-600 text-white text-center py-2 px-4">
     <p class="text-sm">
-      🎬 <strong>Demo Mode</strong> — This is a preview. To generate videos with your own API keys, 
-      <a href="https://github.com/KevPH2026/kev-clip" class="underline font-semibold" target="_blank">deploy your own instance →</a>
+      🎬 <strong>Demo Mode</strong> — Please configure your API keys to generate videos
+      <button onclick="openConfig()" class="underline font-semibold ml-2">Configure Now →</button>
     </p>
   </div>
 
@@ -61,7 +110,7 @@
         </h2>
         <p class="text-gray-400 text-lg max-w-2xl mx-auto">
           Describe your scene, AI generates the video. <br>
-          3 minutes setup, infinite creativity.
+          Enter your own API keys to start.
         </p>
       </div>
 
@@ -107,7 +156,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
-          <span>Generate Video</span>
+          <span id="generateBtnText">Generate Video</span>
         </button>
       </div>
 
@@ -142,27 +191,84 @@
   <script>
     const API_BASE = '';
     let ws = null;
-    let isDemoMode = false;
+    let userConfig = null;
 
-    async function loadConfig() {
-      try {
-        const res = await fetch(`${API_BASE}/api/config`);
-        const config = await res.json();
-        console.log('Config:', config);
-        
-        // Check if demo mode
-        if (config.demoMode) {
-          isDemoMode = true;
-          document.getElementById('demoBanner').classList.remove('hidden');
-        }
-      } catch (e) {
-        console.error('Failed to load config');
+    // Load user config from localStorage
+    function loadUserConfig() {
+      const saved = localStorage.getItem('kev-clip-config');
+      if (saved) {
+        userConfig = JSON.parse(saved);
+        return true;
+      }
+      return false;
+    }
+
+    // Open config modal
+    function openConfig() {
+      document.getElementById('configModal').classList.remove('hidden');
+      // Load saved values if any
+      if (userConfig) {
+        document.getElementById('configTextProvider').value = userConfig.textProvider || 'openai';
+        document.getElementById('configTextKey').value = userConfig.textKey || '';
+        document.getElementById('configVideoProvider').value = userConfig.videoProvider || 'doubao';
+        document.getElementById('configVideoKey').value = userConfig.videoKey || '';
       }
     }
 
+    // Close config modal
+    function closeConfig() {
+      document.getElementById('configModal').classList.add('hidden');
+    }
+
+    // Save config
+    function saveConfig() {
+      const config = {
+        textProvider: document.getElementById('configTextProvider').value,
+        textKey: document.getElementById('configTextKey').value,
+        videoProvider: document.getElementById('configVideoProvider').value,
+        videoKey: document.getElementById('configVideoKey').value
+      };
+      
+      if (!config.textKey || !config.videoKey) {
+        alert('Please enter both API keys');
+        return;
+      }
+      
+      localStorage.setItem('kev-clip-config', JSON.stringify(config));
+      userConfig = config;
+      closeConfig();
+      updateUI();
+      alert('✅ API Keys saved! You can now generate videos.');
+    }
+
+    // Update UI based on config status
+    function updateUI() {
+      const hasConfig = !!userConfig;
+      const btn = document.getElementById('generateBtn');
+      const btnText = document.getElementById('generateBtnText');
+      const banner = document.getElementById('demoBanner');
+      
+      if (hasConfig) {
+        btnText.textContent = 'Generate Video';
+        btn.classList.remove('opacity-50');
+        banner.classList.add('hidden');
+      } else {
+        btnText.textContent = 'Configure API Keys First';
+        btn.classList.add('opacity-50');
+        banner.classList.remove('hidden');
+      }
+    }
+
+    async function loadConfig() {
+      // Check if user has local config
+      const hasUserConfig = loadUserConfig();
+      updateUI();
+    }
+
     async function generate() {
-      if (isDemoMode) {
-        alert('🎬 Demo Mode\n\nThis is a preview of Kev-Clip.\n\nTo generate actual videos, please:\n1. Deploy your own instance on Render\n2. Or run locally with your API keys\n\nGitHub: github.com/KevPH2026/kev-clip');
+      // Check if user has configured API keys
+      if (!userConfig) {
+        openConfig();
         return;
       }
       
@@ -182,12 +288,16 @@
       document.getElementById('generateBtn').disabled = true;
       
       try {
-        // First, generate script
+        // First, generate script with user config
         updateProgress(10, 'Generating script...');
         
         const scriptRes = await fetch(`${API_BASE}/api/scripts/generate`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'X-Text-Provider': userConfig.textProvider,
+            'X-Text-Key': userConfig.textKey
+          },
           body: JSON.stringify({
             project_id: 1,
             prompt: fullPrompt,
@@ -195,14 +305,22 @@
           })
         });
         
+        if (!scriptRes.ok) {
+          throw new Error('Failed to generate script. Check your API keys.');
+        }
+        
         const script = await scriptRes.json();
         
-        // Then, generate video
+        // Then, generate video with user config
         updateProgress(30, 'Generating video segments...');
         
         const videoRes = await fetch(`${API_BASE}/api/videos/generate`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'X-Video-Provider': userConfig.videoProvider,
+            'X-Video-Key': userConfig.videoKey
+          },
           body: JSON.stringify({
             project_id: 1,
             script_id: script.id,
@@ -210,6 +328,10 @@
             duration: parseInt(duration)
           })
         });
+        
+        if (!videoRes.ok) {
+          throw new Error('Failed to generate video. Check your API keys.');
+        }
         
         const video = await videoRes.json();
         
@@ -220,6 +342,7 @@
         console.error('Generation failed:', error);
         updateProgress(0, 'Failed: ' + error.message);
         document.getElementById('generateBtn').disabled = false;
+        alert('❌ ' + error.message);
       }
     }
 
@@ -318,29 +441,6 @@
     // Load initial data
     loadConfig();
     loadVideos();
-    
-    // Setup WebSocket for real-time updates
-    function connectWebSocket() {
-      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      ws = new WebSocket(`${protocol}//${window.location.host}/ws`);
-      
-      ws.onopen = () => {
-        ws.send(JSON.stringify({ type: 'subscribe', projectId: 1 }));
-      };
-      
-      ws.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        if (data.type === 'update') {
-          loadVideos();
-        }
-      };
-      
-      ws.onclose = () => {
-        setTimeout(connectWebSocket, 3000);
-      };
-    }
-    
-    connectWebSocket();
   </script>
 </body>
 </html>
