@@ -22,46 +22,148 @@
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
   <!-- Config Modal -->
-  <div id="configModal" style="display: none;" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-gray-800 rounded-2xl p-8 max-w-md w-full border border-gray-700">
-      <h3 class="text-xl font-bold mb-4 flex items-center">
-        <svg class="w-6 h-6 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-        <span class="i18n-config-title">Configure Your API Keys</span>
-      </h3>
+  <div id="configModal" style="display: none;" class="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm flex items-center justify-center z-50 overflow-y-auto py-8">
+    <div class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl p-0 max-w-2xl w-full mx-4 border border-purple-500/30 shadow-2xl shadow-purple-500/20 relative">
+      <!-- Close button -->
+      <button onclick="closeConfig()" class="absolute top-4 right-4 text-gray-400 hover:text-white z-10 p-2 rounded-full hover:bg-gray-700/50 transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
       
-      <div class="space-y-4 mb-6">
-        <div>
-          <label class="block text-sm text-gray-400 mb-1">Text Model Provider</label>
-          <select id="configTextProvider" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm">
-            <option value="openai">OpenAI (GPT-4)</option>
-            <option value="deepseek">DeepSeek</option>
-            <option value="anthropic">Claude</option>
-            <option value="google">Gemini</option>
-          </select>
+      <!-- Header Section with Gradient -->
+      <div class="relative overflow-hidden rounded-t-3xl bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 p-8 text-center">
+        <div class="absolute inset-0 bg-black/20"></div>
+        <div class="relative z-10">
+          <div class="text-5xl mb-4">👋</div>
+          <h2 class="text-3xl font-bold mb-2 i18n-welcome-title">Welcome to Your AI Studio</h2>
+          <p class="text-xl text-purple-100 i18n-welcome-subtitle">Where your ideas become cinema</p>
         </div>
-        <div>
-          <label class="block text-sm text-gray-400 mb-1">Text API Key</label>
-          <input type="password" id="configTextKey" placeholder="sk-..." class="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm">
-        </div>
-        
-        <div class="border-t border-gray-700 pt-4">
-          <label class="block text-sm text-gray-400 mb-1">Video Model Provider</label>
-          <select id="configVideoProvider" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm">
-            <option value="doubao">Doubao (Seedance)</option>
-            <option value="runway">Runway</option>
-            <option value="pika">Pika</option>
-            <option value="kling">Kling</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-sm text-gray-400 mb-1">Video API Key</label>
-          <input type="password" id="configVideoKey" placeholder="Your video API key" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm">
-        </div>
+        <!-- Decorative elements -->
+        <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-400/30 rounded-full blur-3xl"></div>
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-pink-400/30 rounded-full blur-3xl"></div>
       </div>
       
-      <div class="flex justify-end space-x-3">
-        <button onclick="closeConfig()" class="px-4 py-2 text-gray-400 hover:text-white text-sm">Cancel</button>
-        <button onclick="saveConfig()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg text-sm font-medium">Save & Start</button>
+      <div class="p-8">
+        <!-- Personalization -->
+        <div class="text-center mb-8">
+          <p class="text-gray-400 i18n-ready-for">We've prepared everything for you</p>
+          <p class="text-lg font-semibold gradient-text mt-1 i18n-two-steps">Just 2 steps to unlock unlimited creation:</p>
+        </div>
+        
+        <!-- Step 1: AI Screenwriter -->
+        <div class="mb-6 relative">
+          <div class="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-purple-500 to-pink-500 rounded-full"></div>
+          <div class="bg-gray-800/50 rounded-2xl p-6 border border-gray-700 hover:border-purple-500/50 transition group">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-2xl mr-4 group-hover:scale-110 transition">
+                🤖
+              </div>
+              <div>
+                <div class="text-xs text-purple-400 font-medium uppercase tracking-wider mb-1">STEP 1</div>
+                <h3 class="text-xl font-bold i18n-step1-title">Choose Your AI Screenwriter</h3>
+              </div>
+            </div>
+            <p class="text-gray-400 text-sm mb-4 i18n-step1-desc">Who tells your story?</p>
+            
+            <!-- Provider Cards -->
+            <div class="grid grid-cols-2 gap-3 mb-4">
+              <button type="button" onclick="selectTextProvider('openai')" class="text-provider-btn p-3 rounded-xl border border-gray-600 hover:border-purple-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="openai">
+                <div class="font-semibold text-sm">OpenAI GPT-4</div>
+                <div class="text-xs text-gray-500">Best for creative scripts</div>
+              </button>
+              <button type="button" onclick="selectTextProvider('deepseek')" class="text-provider-btn p-3 rounded-xl border border-gray-600 hover:border-purple-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="deepseek">
+                <div class="font-semibold text-sm">DeepSeek</div>
+                <div class="text-xs text-gray-500">Great for Chinese content</div>
+              </button>
+              <button type="button" onclick="selectTextProvider('anthropic')" class="text-provider-btn p-3 rounded-xl border border-gray-600 hover:border-purple-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="anthropic">
+                <div class="font-semibold text-sm">Claude</div>
+                <div class="text-xs text-gray-500">Detailed storytelling</div>
+              </button>
+              <button type="button" onclick="selectTextProvider('google')" class="text-provider-btn p-3 rounded-xl border border-gray-600 hover:border-purple-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="google">
+                <div class="font-semibold text-sm">Gemini</div>
+                <div class="text-xs text-gray-500">Multimodal understanding</div>
+              </button>
+            </div>
+            
+            <div class="relative">
+              <input type="password" id="configTextKey" placeholder="Paste your API key here" class="w-full bg-gray-900 border border-gray-600 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition">
+              <div class="absolute right-3 top-1/2 -translate-y-1/2">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+              </div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2 flex items-center">
+              <svg class="w-4 h-4 mr-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              <span class="i18n-security-note">Stored only in your browser. We never upload it.</span>
+            </p>
+          </div>
+        </div>
+        
+        <!-- Step 2: AI Director -->
+        <div class="mb-8 relative">
+          <div class="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-pink-500 to-purple-500 rounded-full"></div>
+          <div class="bg-gray-800/50 rounded-2xl p-6 border border-gray-700 hover:border-pink-500/50 transition group">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-500 rounded-xl flex items-center justify-center text-2xl mr-4 group-hover:scale-110 transition">
+                🎥
+              </div>
+              <div>
+                <div class="text-xs text-pink-400 font-medium uppercase tracking-wider mb-1">STEP 2</div>
+                <h3 class="text-xl font-bold i18n-step2-title">Choose Your AI Director</h3>
+              </div>
+            </div>
+            <p class="text-gray-400 text-sm mb-4 i18n-step2-desc">Who brings your script to life?</p>
+            
+            <!-- Provider Cards -->
+            <div class="grid grid-cols-2 gap-3 mb-4">
+              <button type="button" onclick="selectVideoProvider('doubao')" class="video-provider-btn p-3 rounded-xl border border-gray-600 hover:border-pink-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="doubao">
+                <div class="font-semibold text-sm">豆包 Seedance</div>
+                <div class="text-xs text-gray-500">Best quality & speed</div>
+              </button>
+              <button type="button" onclick="selectVideoProvider('runway')" class="video-provider-btn p-3 rounded-xl border border-gray-600 hover:border-pink-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="runway">
+                <div class="font-semibold text-sm">Runway</div>
+                <div class="text-xs text-gray-500">Industry standard</div>
+              </button>
+              <button type="button" onclick="selectVideoProvider('pika')" class="video-provider-btn p-3 rounded-xl border border-gray-600 hover:border-pink-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="pika">
+                <div class="font-semibold text-sm">Pika</div>
+                <div class="text-xs text-gray-500">Creative effects</div>
+              </button>
+              <button type="button" onclick="selectVideoProvider('kling')" class="video-provider-btn p-3 rounded-xl border border-gray-600 hover:border-pink-500 bg-gray-800/50 hover:bg-gray-700 transition text-left" data-provider="kling">
+                <div class="font-semibold text-sm">Kling</div>
+                <div class="text-xs text-gray-500">High fidelity</div>
+              </button>
+            </div>
+            
+            <div class="relative">
+              <input type="password" id="configVideoKey" placeholder="Paste your API key here" class="w-full bg-gray-900 border border-gray-600 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 transition">
+              <div class="absolute right-3 top-1/2 -translate-y-1/2">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+              </div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2 flex items-center">
+              <svg class="w-4 h-4 mr-1 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <a href="#" class="text-purple-400 hover:text-purple-300 underline i18n-get-key">Don't have a key? Get one here →</a>
+            </p>
+          </div>
+        </div>
+        
+        <!-- CTA Section -->
+        <div class="text-center">
+          <p class="text-gray-400 mb-4 i18n-ready">Ready to create?</p>
+          
+          <button onclick="saveConfig()" class="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-600 hover:shadow-lg hover:shadow-purple-500/50 hover:scale-105">
+            <span class="i18n-launch-btn">🚀 Launch My AI Studio</span>
+            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          </button>
+          
+          <!-- Social Proof -->
+          <div class="mt-6 flex items-center justify-center space-x-2 text-sm text-gray-500">
+            <div class="flex -space-x-2">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 border-2 border-gray-800"></div>
+              <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 border-2 border-gray-800"></div>
+              <div class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-400 to-red-400 border-2 border-gray-800"></div>
+            </div>
+            <span class="i18n-social-proof"><strong class="text-white">2,847</strong> creators generated <strong class="text-white">12,392</strong> videos today</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -221,6 +323,20 @@
     // i18n translations
     const i18n = {
       en: {
+        welcomeTitle: 'Welcome to Your AI Studio',
+        welcomeSubtitle: 'Where your ideas become cinema',
+        readyFor: "We've prepared everything for you",
+        twoSteps: 'Just 2 steps to unlock unlimited creation:',
+        step1Title: 'Choose Your AI Screenwriter',
+        step1Desc: 'Who tells your story?',
+        step2Title: 'Choose Your AI Director',
+        step2Desc: 'Who brings your script to life?',
+        securityNote: 'Stored only in your browser. We never upload it.',
+        getKey: "Don't have a key? Get one here →",
+        ready: 'Ready to create?',
+        launchBtn: '🚀 Launch My AI Studio',
+        socialProof: '<strong class="text-white">2,847</strong> creators generated <strong class="text-white">12,392</strong> videos today',
+        keyPlaceholder: 'Paste your API key here',
         config: 'Config',
         subtitle: 'AI Video Studio',
         describeScene: 'Describe your scene',
@@ -234,16 +350,25 @@
         scriptStyle: 'Script Style',
         visualStyle: 'Visual Style',
         duration: 'Duration',
-        configTitle: 'Configure Your API Keys',
-        textProvider: 'Text Model Provider',
-        textKey: 'Text API Key',
-        videoProvider: 'Video Model Provider',
-        videoKey: 'Video API Key',
         cancel: 'Cancel',
         save: 'Save & Start',
         noVideos: 'No videos yet. Create your first one above!'
       },
       zh: {
+        welcomeTitle: '欢迎进入你的 AI 创作空间',
+        welcomeSubtitle: '在这里，你的想法会变成电影',
+        readyFor: '我们已经为你准备好了一切',
+        twoSteps: '只需 2 步，开启无限创作：',
+        step1Title: '选择你的 AI 编剧',
+        step1Desc: '谁来讲述你的故事？',
+        step2Title: '选择你的 AI 导演',
+        step2Desc: '谁来把你的剧本变成画面？',
+        securityNote: '仅存储在你的浏览器，我们不会上传',
+        getKey: '没有密钥？点击这里获取 →',
+        ready: '准备好了吗？',
+        launchBtn: '🚀 启动我的 AI 工作室',
+        socialProof: '今天已有 <strong class="text-white">2,847</strong> 位创作者生成了 <strong class="text-white">12,392</strong> 个视频',
+        keyPlaceholder: '在此粘贴你的 API 密钥',
         config: '配置',
         subtitle: 'AI 视频工作室',
         describeScene: '描述你的场景',
@@ -257,14 +382,9 @@
         scriptStyle: '剧本风格',
         visualStyle: '视觉风格',
         duration: '时长',
-        configTitle: '配置您的 API 密钥',
-        textProvider: '文本模型提供商',
-        textKey: '文本 API 密钥',
-        videoProvider: '视频模型提供商',
-        videoKey: '视频 API 密钥',
         cancel: '取消',
         save: '保存并启动',
-        noVideos: '还没有视频。在上方创建您的第一个视频！'
+        noVideos: '还没有视频。在上方创建你的第一个视频！'
       }
     };
 
@@ -309,8 +429,70 @@
       const promptInput = document.getElementById('promptInput');
       if (promptInput) promptInput.placeholder = t.describeScene;
       
+      // Update texts
+      document.querySelectorAll('.i18n-welcome-title').forEach(el => el.textContent = t.welcomeTitle);
+      document.querySelectorAll('.i18n-welcome-subtitle').forEach(el => el.textContent = t.welcomeSubtitle);
+      document.querySelectorAll('.i18n-ready-for').forEach(el => el.textContent = t.readyFor);
+      document.querySelectorAll('.i18n-two-steps').forEach(el => el.textContent = t.twoSteps);
+      document.querySelectorAll('.i18n-step1-title').forEach(el => el.textContent = t.step1Title);
+      document.querySelectorAll('.i18n-step1-desc').forEach(el => el.textContent = t.step1Desc);
+      document.querySelectorAll('.i18n-step2-title').forEach(el => el.textContent = t.step2Title);
+      document.querySelectorAll('.i18n-step2-desc').forEach(el => el.textContent = t.step2Desc);
+      document.querySelectorAll('.i18n-security-note').forEach(el => el.textContent = t.securityNote);
+      document.querySelectorAll('.i18n-get-key').forEach(el => el.textContent = t.getKey);
+      document.querySelectorAll('.i18n-ready').forEach(el => el.textContent = t.ready);
+      document.querySelectorAll('.i18n-launch-btn').forEach(el => el.textContent = t.launchBtn);
+      document.querySelectorAll('.i18n-social-proof').forEach(el => el.innerHTML = t.socialProof);
+      
+      // Update placeholders
+      const textKeyInput = document.getElementById('configTextKey');
+      const videoKeyInput = document.getElementById('configVideoKey');
+      if (textKeyInput) textKeyInput.placeholder = t.keyPlaceholder;
+      if (videoKeyInput) videoKeyInput.placeholder = t.keyPlaceholder;
+      
       // Update generate button
       updateUI();
+    }
+
+    // Select text provider
+    function selectTextProvider(provider) {
+      document.querySelectorAll('.text-provider-btn').forEach(btn => {
+        if (btn.dataset.provider === provider) {
+          btn.classList.add('border-purple-500', 'bg-purple-500/20');
+          btn.classList.remove('border-gray-600', 'bg-gray-800/50');
+        } else {
+          btn.classList.remove('border-purple-500', 'bg-purple-500/20');
+          btn.classList.add('border-gray-600', 'bg-gray-800/50');
+        }
+      });
+      // Store selected provider in a hidden input or variable
+      if (!document.getElementById('selectedTextProvider')) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.id = 'selectedTextProvider';
+        document.body.appendChild(input);
+      }
+      document.getElementById('selectedTextProvider').value = provider;
+    }
+
+    // Select video provider
+    function selectVideoProvider(provider) {
+      document.querySelectorAll('.video-provider-btn').forEach(btn => {
+        if (btn.dataset.provider === provider) {
+          btn.classList.add('border-pink-500', 'bg-pink-500/20');
+          btn.classList.remove('border-gray-600', 'bg-gray-800/50');
+        } else {
+          btn.classList.remove('border-pink-500', 'bg-pink-500/20');
+          btn.classList.add('border-gray-600', 'bg-gray-800/50');
+        }
+      });
+      if (!document.getElementById('selectedVideoProvider')) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.id = 'selectedVideoProvider';
+        document.body.appendChild(input);
+      }
+      document.getElementById('selectedVideoProvider').value = provider;
     }
 
     // Load user config from localStorage
@@ -330,11 +512,16 @@
       if (modal) {
         modal.style.display = 'flex';
         modal.classList.remove('hidden');
+        
+        // Set default providers
+        selectTextProvider('openai');
+        selectVideoProvider('doubao');
+        
         // Load saved values if any
         if (userConfig) {
-          document.getElementById('configTextProvider').value = userConfig.textProvider || 'openai';
+          if (userConfig.textProvider) selectTextProvider(userConfig.textProvider);
+          if (userConfig.videoProvider) selectVideoProvider(userConfig.videoProvider);
           document.getElementById('configTextKey').value = userConfig.textKey || '';
-          document.getElementById('configVideoProvider').value = userConfig.videoProvider || 'doubao';
           document.getElementById('configVideoKey').value = userConfig.videoKey || '';
         }
       }
@@ -351,10 +538,13 @@
 
     // Save config
     function saveConfig() {
+      const textProvider = document.getElementById('selectedTextProvider')?.value || 'openai';
+      const videoProvider = document.getElementById('selectedVideoProvider')?.value || 'doubao';
+      
       const config = {
-        textProvider: document.getElementById('configTextProvider').value,
+        textProvider: textProvider,
         textKey: document.getElementById('configTextKey').value,
-        videoProvider: document.getElementById('configVideoProvider').value,
+        videoProvider: videoProvider,
         videoKey: document.getElementById('configVideoKey').value
       };
       
