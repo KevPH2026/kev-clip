@@ -36,16 +36,45 @@ function initDB() {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
     
+    -- Novel/Story import table
+    CREATE TABLE IF NOT EXISTS novels (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      project_id INTEGER NOT NULL,
+      chapter_index INTEGER NOT NULL,
+      title TEXT NOT NULL,
+      content TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (project_id) REFERENCES projects(id)
+    );
+    
+    -- Storyboard/Outline table
+    CREATE TABLE IF NOT EXISTS outlines (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      project_id INTEGER NOT NULL,
+      episode INTEGER NOT NULL,
+      title TEXT NOT NULL,
+      summary TEXT,
+      scenes TEXT, -- JSON array of scenes
+      characters TEXT, -- JSON array of characters
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (project_id) REFERENCES projects(id)
+    );
+    
+    -- Script/Storyboard shots table
     CREATE TABLE IF NOT EXISTS scripts (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       project_id INTEGER NOT NULL,
+      outline_id INTEGER,
       episode INTEGER DEFAULT 1,
       title TEXT NOT NULL,
       content TEXT NOT NULL,
       prompt TEXT,
+      shots TEXT, -- JSON array of storyboard shots
       status TEXT DEFAULT 'pending',
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      completed_at DATETIME
+      completed_at DATETIME,
+      FOREIGN KEY (project_id) REFERENCES projects(id),
+      FOREIGN KEY (outline_id) REFERENCES outlines(id)
     );
     
     CREATE TABLE IF NOT EXISTS videos (
@@ -62,7 +91,7 @@ function initDB() {
       completed_at DATETIME
     );
   `);
-  console.log('✅ Database initialized');
+  console.log('✅ Database initialized with novels, outlines, scripts, videos');
 }
 
 // Load adapter
@@ -123,6 +152,136 @@ app.post('/api/projects', (req, res) => {
   ).run(name, description);
   res.json({ id: result.lastInsertRowid, name, description });
 });
+
+// ==================== NOVEL / STORY IMPORT ====================
+
+// Upload novel chapter (Story Import)
+app.post('/api/novels', (req, res) => {
+  const { project_id, chapter_index, title, content } = req.body;
+  
+  if (!project_id || !content) {
+    return res.status(400).json({ error: 'project_id and content are required' });
+  }
+  
+  const result = db.prepare(
+    'INSERT INTO novels (project_id, chapter_index, title, content) VALUES (?, ?, ?, ?)'
+  ).run(project_id, chapter_index || 1, title || `Chapter ${chapter_index || 1}`, content);
+  
+  res.json({ 
+    id: result.lastInsertRowid, 
+    project_id, 
+    chapter_index: chapter_index || 1, 
+    title, 
+    content_length: content.length 
+  });
+});
+
+// Get all novel chapters for a project
+app.get('/api/novels/:project_id', (req, res) => {
+  const novels = db.prepare(
+    'SELECT * FROM novels WHERE project_id = ? ORDER BY chapter_index'
+  ).all(req.params.project_id);
+  res.json(novels);
+});
+
+// Get single novel chapter
+app.get('/api/novel/:id', (req, res) => {
+  const novel = db.prepare('SELECT * FROM novels WHERE id = ?').get(req.params.id);
+  if (!novel) {
+    return res.status(404).json({ error: 'Novel chapter not found' });
+  }
+  res.json(novel);
+});
+
+// Delete novel chapter
+app.delete('/api/novels/:id', (req, res) => {
+  db.prepare('DELETE FROM novels WHERE id = ?').run(req.params.id);
+  res.json({ deleted: true });
+});
+
+// ==================== STORYBOARD / OUTLINE ====================
+
+// Create outline (Storyboard generation)
+app.post('/api/outlines', (req, res) => {
+  const { project_id, episode, title, summary, scenes, characters } = req.body;
+  
+  if (!project_id || !title) {
+    return res.status(400).json({ error: 'project_id and title are required' });
+  }
+  
+  const result = db.prepare(
+    'INSERT INTO outlines (project_id, episode, title, summary, scenes, characters) VALUES (?, ?, ?, ?, ?, ?)'
+  ).run(
+    project_id, 
+    episode || 1, 
+    title, 
+    summary || '', 
+    JSON.stringify(scenes || []), 
+    JSON.stringify(characters || [])
+  );
+  
+  res.json({ 
+    id: result.lastInsertRowid, 
+    project_id, 
+    episode: episode || 1, 
+    title,
+    summary,
+    scenes: scenes || [],
+    characters: characters || []
+  });
+});
+
+// Get all outlines for a project
+app.get('/api/outlines/:project_id', (req, res) => {
+  const outlines = db.prepare(
+    'SELECT * FROM outlines WHERE project_id = ? ORDER BY episode'
+  ).all(req.params.project_id);
+  
+  res.json(outlines.map(o => ({
+    ...o,
+    scenes: JSON.parse(o.scenes || '[]'),
+    characters: JSON.parse(o.characters || '[]')
+  })));
+});
+
+// Get single outline
+app.get('/api/outline/:id', (req, res) => {
+  const outline = db.prepare('SELECT * FROM outlines WHERE id = ?').get(req.params.id);
+  if (!outline) {
+    return res.status(404).json({ error: 'Outline not found' });
+  }
+  
+  res.json({
+    ...outline,
+    scenes: JSON.parse(outline.scenes || '[]'),
+    characters: JSON.parse(outline.characters || '[]')
+  });
+});
+
+// Update outline
+app.put('/api/outlines/:id', (req, res) => {
+  const { title, summary, scenes, characters } = req.body;
+  
+  db.prepare(
+    'UPDATE outlines SET title = ?, summary = ?, scenes = ?, characters = ? WHERE id = ?'
+  ).run(
+    title, 
+    summary, 
+    JSON.stringify(scenes || []), 
+    JSON.stringify(characters || []), 
+    req.params.id
+  );
+  
+  res.json({ updated: true });
+});
+
+// Delete outline
+app.delete('/api/outlines/:id', (req, res) => {
+  db.prepare('DELETE FROM outlines WHERE id = ?').run(req.params.id);
+  res.json({ deleted: true });
+});
+
+// ==================== SCRIPT / STORYBOARD SHOTS ====================
 
 // Generate script
 app.post('/api/scripts/generate', async (req, res) => {
@@ -273,16 +432,149 @@ async function generateScriptAsync(scriptId, prompt, textProvider, textKey, text
 // Get scripts
 app.get('/api/scripts/:project_id', (req, res) => {
   const scripts = db.prepare(
-    'SELECT * FROM scripts WHERE project_id = ? ORDER BY created_at DESC'
+    'SELECT * FROM scripts WHERE project_id = ? ORDER BY episode ASC, created_at DESC'
   ).all(req.params.project_id);
-  res.json(scripts);
+  
+  res.json(scripts.map(s => ({
+    ...s,
+    shots: JSON.parse(s.shots || '[]')
+  })));
 });
 
 // Get single script
 app.get('/api/script/:id', (req, res) => {
   const script = db.prepare('SELECT * FROM scripts WHERE id = ?').get(req.params.id);
-  res.json(script);
+  if (!script) {
+    return res.status(404).json({ error: 'Script not found' });
+  }
+  
+  res.json({
+    ...script,
+    shots: JSON.parse(script.shots || '[]')
+  });
 });
+
+// Create script with storyboard shots
+app.post('/api/scripts', (req, res) => {
+  const { project_id, outline_id, episode, title, content, shots } = req.body;
+  
+  if (!project_id || !title) {
+    return res.status(400).json({ error: 'project_id and title are required' });
+  }
+  
+  const result = db.prepare(
+    'INSERT INTO scripts (project_id, outline_id, episode, title, content, shots, status) VALUES (?, ?, ?, ?, ?, ?, ?)'
+  ).run(
+    project_id, 
+    outline_id || null, 
+    episode || 1, 
+    title, 
+    content || '', 
+    JSON.stringify(shots || []),
+    'completed'
+  );
+  
+  res.json({ 
+    id: result.lastInsertRowid, 
+    project_id, 
+    outline_id,
+    episode: episode || 1, 
+    title,
+    content,
+    shots: shots || [],
+    status: 'completed'
+  });
+});
+
+// Update script with storyboard shots
+app.put('/api/scripts/:id', (req, res) => {
+  const { title, content, shots } = req.body;
+  
+  db.prepare(
+    'UPDATE scripts SET title = ?, content = ?, shots = ? WHERE id = ?'
+  ).run(title, content, JSON.stringify(shots || []), req.params.id);
+  
+  res.json({ updated: true });
+});
+
+// Delete script
+app.delete('/api/scripts/:id', (req, res) => {
+  db.prepare('DELETE FROM scripts WHERE id = ?').run(req.params.id);
+  res.json({ deleted: true });
+});
+
+// Generate script from outline (AI generation)
+app.post('/api/scripts/generate-from-outline', async (req, res) => {
+  const { project_id, outline_id } = req.body;
+  
+  // Get outline
+  const outline = db.prepare('SELECT * FROM outlines WHERE id = ?').get(outline_id);
+  if (!outline) {
+    return res.status(404).json({ error: 'Outline not found' });
+  }
+  
+  const outlineData = {
+    ...outline,
+    scenes: JSON.parse(outline.scenes || '[]'),
+    characters: JSON.parse(outline.characters || '[]')
+  };
+  
+  // Create script with shots based on outline scenes
+  const shots = outlineData.scenes.map((scene, index) => ({
+    shot_number: index + 1,
+    scene: scene.title || `Scene ${index + 1}`,
+    time: scene.time || 'Day',
+    characters: scene.characters || [],
+    action: scene.description || '',
+    camera: scene.camera || 'Medium shot',
+    dialogue: scene.dialogue || '',
+    bgm: scene.bgm || 'Ambient'
+  }));
+  
+  const scriptContent = generateScriptFromOutline(outlineData);
+  
+  const result = db.prepare(
+    'INSERT INTO scripts (project_id, outline_id, episode, title, content, shots, status) VALUES (?, ?, ?, ?, ?, ?, ?)'
+  ).run(
+    project_id,
+    outline_id,
+    outline.episode,
+    outline.title,
+    scriptContent,
+    JSON.stringify(shots),
+    'completed'
+  );
+  
+  res.json({
+    id: result.lastInsertRowid,
+    project_id,
+    outline_id,
+    episode: outline.episode,
+    title: outline.title,
+    content: scriptContent,
+    shots,
+    status: 'completed'
+  });
+});
+
+// Helper function to generate script content from outline
+function generateScriptFromOutline(outline) {
+  let script = `※ ${outline.title}\n\n`;
+  
+  const scenes = JSON.parse(outline.scenes || '[]');
+  scenes.forEach((scene, index) => {
+    script += `※ ${scene.title || `场景 ${index + 1}`} - ${scene.time || '白天'}\n`;
+    script += `$ ${(scene.characters || []).join('、')}\n`;
+    script += `【BGM】${scene.bgm || '环境音'}\n`;
+    script += `△ ${scene.camera || '中景'}\n`;
+    if (scene.dialogue) {
+      script += `角色：${scene.dialogue}\n`;
+    }
+    script += `动作：${scene.description || scene.action || ''}\n\n`;
+  });
+  
+  return script;
+}
 
 // Generate video
 app.post('/api/videos/generate', async (req, res) => {
