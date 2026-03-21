@@ -12,11 +12,12 @@ expressWs(app);
 
 const PORT = process.env.PORT || 3000;
 const DB_PATH = process.env.DB_PATH || './kev-clip.db';
+const PUBLIC_DIR = path.join(__dirname, '..', 'public');
 
 // Middleware
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
-app.use(express.static('public'));
+app.use(express.static(PUBLIC_DIR));
 
 // Database
 const db = new Database(DB_PATH);

@@ -1,28 +1,12 @@
+# Render Blueprint for Kev-Clip
 services:
   - type: web
     name: kev-clip
     runtime: node
     nodeVersion: 20
     repo: https://github.com/KevPH2026/kev-clip
+    branch: main
     buildCommand: npm install
     startCommand: npm start
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: PORT
-        value: 10000
-      # Optional: Leave blank for demo mode (shows UI only, no API calls)
-      - key: TEXT_PROVIDER
-        sync: false
-      - key: TEXT_API_KEY
-        sync: false
-      - key: TEXT_MODEL
-        sync: false
-      - key: VIDEO_PROVIDER
-        sync: false
-      - key: VIDEO_API_KEY
-        sync: false
-      - key: VIDEO_MODEL
-        sync: false
+    plan: free
     healthCheckPath: /api/health
-    autoDeploy: true
