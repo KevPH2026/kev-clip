@@ -127,22 +127,40 @@
         </div>
         
         <div class="flex flex-wrap gap-4 mb-4">
-          <div class="flex-1 min-w-[200px]">
-            <label class="block text-sm text-gray-400 mb-1">Style</label>
-            <select id="styleSelect" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
-              <option value="cyberpunk">🌃 Cyberpunk</option>
-              <option value="anime">🎌 Anime</option>
-              <option value="cinematic">🎬 Cinematic</option>
-              <option value="fantasy">🐉 Fantasy</option>
-              <option value="scifi">🚀 Sci-Fi</option>
+          <div class="flex-1 min-w-[150px]">
+            <label class="block text-sm text-gray-400 mb-1">Language / 语言</label>
+            <select id="languageSelect" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
+              <option value="en">English</option>
+              <option value="zh">中文</option>
             </select>
           </div>
-          <div class="flex-1 min-w-[200px]">
-            <label class="block text-sm text-gray-400 mb-1">Duration</label>
+          <div class="flex-1 min-w-[150px]">
+            <label class="block text-sm text-gray-400 mb-1">Script Style / 剧本风格</label>
+            <select id="scriptStyleSelect" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
+              <option value="short-drama">Short Drama / 短剧</option>
+              <option value="anime">Anime / 动漫</option>
+              <option value="movie">Movie / 电影感</option>
+              <option value="comedy">Comedy / 喜剧</option>
+              <option value="horror">Horror / 恐怖</option>
+            </select>
+          </div>
+          <div class="flex-1 min-w-[150px]">
+            <label class="block text-sm text-gray-400 mb-1">Visual Style / 视觉风格</label>
+            <select id="styleSelect" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
+              <option value="cyberpunk">🌃 Cyberpunk / 赛博朋克</option>
+              <option value="anime">🎌 Anime / 二次元</option>
+              <option value="cinematic">🎬 Cinematic / 电影感</option>
+              <option value="fantasy">🐉 Fantasy / 奇幻</option>
+              <option value="scifi">🚀 Sci-Fi / 科幻</option>
+              <option value="realistic">📷 Realistic / 写实</option>
+            </select>
+          </div>
+          <div class="flex-1 min-w-[150px]">
+            <label class="block text-sm text-gray-400 mb-1">Duration / 时长</label>
             <select id="durationSelect" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
-              <option value="10">10 seconds</option>
-              <option value="30">30 seconds (3 clips)</option>
-              <option value="60">60 seconds (6 clips)</option>
+              <option value="10">10s</option>
+              <option value="30">30s (3 clips)</option>
+              <option value="60">60s (6 clips)</option>
             </select>
           </div>
         </div>
@@ -275,9 +293,11 @@
       const prompt = document.getElementById('promptInput').value;
       const style = document.getElementById('styleSelect').value;
       const duration = document.getElementById('durationSelect').value;
+      const language = document.getElementById('languageSelect').value;
+      const scriptStyle = document.getElementById('scriptStyleSelect').value;
       
       if (!prompt) {
-        alert('Please describe your scene');
+        alert('Please describe your scene / 请描述你的场景');
         return;
       }
       
@@ -301,7 +321,9 @@
           body: JSON.stringify({
             project_id: 1,
             prompt: fullPrompt,
-            title: prompt.slice(0, 50)
+            title: prompt.slice(0, 50),
+            language: language,
+            scriptStyle: scriptStyle
           })
         });
         

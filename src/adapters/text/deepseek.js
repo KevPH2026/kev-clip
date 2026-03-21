@@ -12,11 +12,17 @@ class DeepSeekAdapter {
     this.baseURL = config.baseURL || 'https://api.deepseek.com/v1';
   }
 
-  async generate({ prompt }) {
-    const messages = [{
+  async generate({ prompt, system = null }) {
+    const messages = [];
+    
+    if (system) {
+      messages.push({ role: 'system', content: system });
+    }
+    
+    messages.push({
       role: 'user',
       content: `根据以下描述生成视频剧本：\n\n${prompt}\n\n格式要求：\n※ 场景 - 时间\n$ 角色\n【BGM】\n△ 镜头描述\n角色名：对白\n\n请生成至少5个分镜，包含详细描述。`
-    }];
+    });
 
     try {
       const response = await axios.post(

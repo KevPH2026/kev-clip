@@ -127,7 +127,7 @@ app.post('/api/projects', (req, res) => {
 
 // Generate script
 app.post('/api/scripts/generate', async (req, res) => {
-  const { project_id, prompt, title } = req.body;
+  const { project_id, prompt, title, language, scriptStyle } = req.body;
   
   // Get user's API keys from headers
   const textProvider = req.headers['x-text-provider'] || process.env.TEXT_PROVIDER;
@@ -144,20 +144,47 @@ app.post('/api/scripts/generate', async (req, res) => {
   
   const scriptId = result.lastInsertRowid;
   
-  // Start async generation with user's config
-  generateScriptAsync(scriptId, prompt, textProvider, textKey);
+  // Start async generation with user's config and preferences
+  generateScriptAsync(scriptId, prompt, textProvider, textKey, language || 'en', scriptStyle || 'short-drama');
   
   res.json({ id: scriptId, status: 'generating' });
 });
 
-async function generateScriptAsync(scriptId, prompt, textProvider, textKey) {
+async function generateScriptAsync(scriptId, prompt, textProvider, textKey, language, scriptStyle) {
   try {
     const adapter = loadAdapter('text', textProvider || process.env.TEXT_PROVIDER, textKey);
     if (!adapter) throw new Error('Text adapter not found');
     
+    // Build system prompt based on language and style
+    let systemPrompt = '';
+    
+    if (language === 'zh') {
+      systemPrompt = '你是一个专业的中文短剧编剧。';
+    } else {
+      systemPrompt = 'You are a professional short drama scriptwriter. ';
+    }
+    
+    switch (scriptStyle) {
+      case 'anime':
+        systemPrompt += language === 'zh' ? '请生成动漫风格的剧本，包含日式动漫的视觉元素和叙事节奏。' : 'Generate an anime-style script with Japanese animation visual elements and pacing. ';
+        break;
+      case 'movie':
+        systemPrompt += language === 'zh' ? '请生成电影感的剧本，注重视觉冲击力和叙事深度。' : 'Generate a cinematic script with strong visual impact and narrative depth. ';
+        break;
+      case 'comedy':
+        systemPrompt += language === 'zh' ? '请生成喜剧风格的剧本，包含幽默元素和轻松氛围。' : 'Generate a comedy script with humorous elements and light atmosphere. ';
+        break;
+      case 'horror':
+        systemPrompt += language === 'zh' ? '请生成恐怖风格的剧本，营造紧张恐怖的氛围。' : 'Generate a horror script with tense and scary atmosphere. ';
+        break;
+      default: // short-drama
+        systemPrompt += language === 'zh' ? '请生成短剧风格的剧本，节奏紧凑，每集结尾有悬念。' : 'Generate a short drama script with fast pacing and cliffhangers at the end of each episode. ';
+    }
+    
     const script = await adapter.generate({
       prompt,
       model: process.env.TEXT_MODEL,
+      system: systemPrompt
     });
     
     db.prepare(
